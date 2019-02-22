@@ -1,2 +1,0 @@
-# madgamejam
-Mad gamejam game
