@@ -1,5 +1,5 @@
-var WIDTH = 800;
-var HEIGHT = 600;
+var WIDTH = window.innerWidth;
+var HEIGHT = window.innerHeight;
 
 var config = {
     type: Phaser.AUTO,
@@ -17,6 +17,9 @@ var config = {
         preload: preload,
         create: create,
         update: update
+    },
+    fps: {
+        target: 30
     }
 };
 
@@ -24,6 +27,7 @@ var game = new Phaser.Game(config);
 
 var homePlanet;
 var sun;
+<<<<<<< HEAD
 var earth;
 var cursors;
 var raio;
@@ -31,10 +35,22 @@ var rotation = 0.3;
 var angle = Math.PI / 2;
 
 var rotation;   
+=======
+var sky;
+
+var rotation = 0.25;
+
+var sun_properties = {
+    radius: 0,
+    angle: 0
+
+}
+>>>>>>> b1a52344ce952db4a85eacc1f35ca6e1e317e9a7
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('mars', 'assets/mars.png');
+<<<<<<< HEAD
     this.load.image('earth', 'assets/earth.png');
     this.load.spritesheet('player',
 				'assets/dude.png', {
@@ -73,4 +89,29 @@ function update() {
         // player.anims.play('turn');
     }
     
+=======
+    this.load.image('sun', 'assets/sun_shiny.png');
+}
+
+function create() {
+    sky = this.add.image(WIDTH/2, HEIGHT/2, 'sky');
+    sky.setDisplaySize(WIDTH,HEIGHT);
+    homePlanet = this.add.image(WIDTH / 2, HEIGHT / 2, 'mars');
+    sun = this.add.image(WIDTH / 2, HEIGHT / 2, 'sun');
+    sun_properties.radius = HEIGHT - homePlanet.y;
+    sun_properties.angle = 0;
+
+}
+
+function update() {
+    updateSun();
+}
+
+
+function updateSun() {
+    sun.x = homePlanet.x + Math.cos(sun_properties.angle) * sun_properties.radius;
+    sun.y = homePlanet.y + Math.sin(sun_properties.angle) * sun_properties.radius;
+    sun_properties.angle += Math.PI / 512;
+
+>>>>>>> b1a52344ce952db4a85eacc1f35ca6e1e317e9a7
 }
