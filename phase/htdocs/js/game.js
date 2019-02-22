@@ -1,7 +1,10 @@
+var WIDTH = 800;
+var HEIGHT = 600;
+
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: WIDTH,
+    height: HEIGHT,
     physics: {
         default: 'arcade',
         arcade: {
@@ -33,6 +36,7 @@ function preload() {
 
 function create() {
     this.add.image(400, 300, 'sky');
+    this.add.image()
     homePlanet = this.add.image(500, 500, 'mars');
 }
 
