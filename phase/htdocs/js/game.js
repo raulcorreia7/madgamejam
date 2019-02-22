@@ -1,5 +1,5 @@
-var WIDTH = 800;
-var HEIGHT = 600;
+var WIDTH = window.innerWidth;
+var HEIGHT = window.innerHeight;
 
 var config = {
     type: Phaser.AUTO,
@@ -27,6 +27,7 @@ var game = new Phaser.Game(config);
 
 var homePlanet;
 var sun;
+var sky;
 
 var rotation = 0.25;
 
@@ -43,7 +44,9 @@ function preload() {
 }
 
 function create() {
-    this.add.image(400, 300, 'sky');
+    sky = this.add.image(400, 300, 'sky');
+    sky.width = WIDTH;
+    sky.height = HEIGHT;
     homePlanet = this.add.image(WIDTH / 2, HEIGHT / 2, 'mars');
     sun = this.add.image(WIDTH / 2, HEIGHT / 2, 'sun');
 
@@ -60,6 +63,6 @@ function update() {
 function updateSun() {
     sun.x = homePlanet.x + Math.cos(sun_properties.angle) * sun_properties.radius;
     sun.y = homePlanet.y + Math.sin(sun_properties.angle) * sun_properties.radius;
-    sun_properties.angle += Math.PI/512;
+    sun_properties.angle += Math.PI / 512;
 
 }
