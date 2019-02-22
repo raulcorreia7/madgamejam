@@ -44,12 +44,10 @@ function preload() {
 }
 
 function create() {
-    sky = this.add.image(400, 300, 'sky');
-    sky.width = WIDTH;
-    sky.height = HEIGHT;
+    sky = this.add.image(WIDTH/2, HEIGHT/2, 'sky');
+    sky.setDisplaySize(WIDTH,HEIGHT);
     homePlanet = this.add.image(WIDTH / 2, HEIGHT / 2, 'mars');
     sun = this.add.image(WIDTH / 2, HEIGHT / 2, 'sun');
-
     sun_properties.radius = HEIGHT - homePlanet.y;
     sun_properties.angle = 0;
 
