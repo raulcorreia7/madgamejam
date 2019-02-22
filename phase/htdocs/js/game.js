@@ -36,6 +36,7 @@ function preload() {
 
 function create() {
     this.add.image(400, 300, 'sky');
+    this.add.image()
     homePlanet = this.add.image(500, 500, 'mars');
 }
 
