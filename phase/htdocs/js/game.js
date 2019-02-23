@@ -56,6 +56,18 @@ var angle = Math.PI / 2;
 */
 var sun_rays;
 
+
+/*
+    Clouds
+*/
+
+var clouds = [];
+
+var cloud_properties = {
+    STEP: Math.PI / 2,
+    MINI_STEP: Math.PI / 16
+}
+
 var rotation;
 
 function preload() {
@@ -67,6 +79,7 @@ function preload() {
             frameWidth: 32,
             frameHeight: 48
         });
+    this.load.image('cloud', 'assets/cloud.png');
 }
 
 function create() {
@@ -76,6 +89,7 @@ function create() {
     createSun(this);
     createLight(this);
     createPlayer(this);
+    createClouds(this);
     cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -186,4 +200,19 @@ function createSun(game) {
         raio * 2.75, 0xffff00, 5);
     sun.scaleX = 0.5;
     sun.scaleY = 0.5;
+}
+
+
+function createClouds(game) {
+    var cloud_radius = raio * 1.75;
+    for (var i = 0; i < 2 * Math.PI; i += cloud_properties.STEP) {
+        for (var n = 0; n < 3; n++) {
+            clouds.push(
+                game.add.image(earth.x + cloud_radius * Math.cos(i + n * cloud_properties.MINI_STEP),
+                    earth.y + cloud_radius * Math.sin(i + n * cloud_properties.MINI_STEP),
+                    'cloud')
+            )
+        }
+    }
+
 }
