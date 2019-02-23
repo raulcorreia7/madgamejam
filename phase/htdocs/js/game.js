@@ -75,7 +75,7 @@ function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
-
+    this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -92,6 +92,8 @@ function create() {
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
 
+    let music = this.sound.add('music');
+    music.play();
     // createClouds(this);
 }
 
