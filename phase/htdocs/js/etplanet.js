@@ -1,9 +1,10 @@
 class EtPlanet {
 
-    constructor(game, width, height) {
+    constructor(game, width, height, MAX_PLANETS) {
         this.SCREEN_WIDTH = width;
         this.SCREEN_HEIGHT = height;
-        this.entity = game.physics.add.sprite(width, 0, 'etplanet', 0);
+        this.entity = game.physics.add.sprite(width, height, 'etplanet', 0);
+        this.entity.y -= this.entity.height / 2;
 
         this.rotation_step = Phaser.Math.FloatBetween(0.05, 0.35);
         var rnd = Phaser.Math.FloatBetween(0.15, 0.2);
