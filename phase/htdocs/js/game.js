@@ -166,7 +166,6 @@ function createPlanets(game) {
         et.addAsteroid(particle);
     }
 }
-
 function update() {
 
     var deltaTime = Date.now() - TIME;
