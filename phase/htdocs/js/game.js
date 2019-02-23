@@ -67,6 +67,8 @@ var cloud_properties = {
     ROTATION_STEP: Math.PI / 128
 }
 
+var TIME = Date.now();
+
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
@@ -129,24 +131,26 @@ function createPlanets(game) {
 }
 
 function update() {
+
+    var deltaTime = Date.now() - TIME;
     if (game.sound.context.state === 'suspended') {
         game.sound.context.resume();
     }
-    
+
     sun.update(earth);
     player.update(earth, cursors);
     enemy.update(earth);
-    etPlanets.forEach(e => e.update());
+    etPlanets.forEach(e => e.update(deltaTime));
 
     if (rate == ray_cooldown) {
         rate = 0;
-    } 
-    if(rate == 0){
+    }
+    if (rate == 0) {
         var raiox = (sun.entity.width * sun.entity.scaleX) / 2;
         var raioy = (sun.entity.height * sun.entity.scaleY) / 2;
-        var x = sun.x() - raiox + raiox* Math.random();
-        var y = sun.y() - raioy + raioy* Math.random();
-        var ray = this.physics.add.sprite(x,y, 'ray');
+        var x = sun.x() - raiox + raiox * Math.random();
+        var y = sun.y() - raioy + raioy * Math.random();
+        var ray = this.physics.add.sprite(x, y, 'ray');
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
         this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
@@ -168,7 +172,10 @@ function update() {
 
         etPlanets.forEach((planet) => {
             if (RectCircleColliding(planet, child)) {
-                child.disableBody(true,true);
+                child.disableBody(true, true);
+                planet.heal();
+                child.x = WIDTH * 2;
+                child.y = HEIGHT * y;
             }
 
         })
@@ -180,7 +187,9 @@ function update() {
         if (child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT) {
             child.disableBody(true, true);
         }
-    })
+    });
+
+    TIME = Date.now();
 }
 
 function updateRays() {

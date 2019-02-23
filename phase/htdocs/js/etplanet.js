@@ -10,9 +10,18 @@ class EtPlanet {
         this.entity.scaleX = rnd;
         this.entity.scaleY = rnd;
         this.radius = this.entity.height * this.entity.scaleY / 2;
+        this.ElapsedTime = 0;
+        this.TargetTime = 10 * 1000;
+        this.color = 0x000000;
+        this.STEP = 25;
+        this.health = 0;
+        this.MAX_HEALTH = 500;
     }
 
-    update() {
+    update(deltatime) {
+        console.log(deltatime);
+        this.ElapsedTime += deltatime;
+        this.updateColors();
         this.entity.angle += this.rotation_step;
     }
 
@@ -49,5 +58,39 @@ class EtPlanet {
     }
     y() {
         return this.entity.y;
+    }
+
+    heal() {
+        if (this.health < this.MAX_HEALTH) {
+            this.health += this.STEP;
+        }
+    }
+
+    tick(deltaTime) {
+
+
+    }
+
+    updateColors() {
+        var percent = this.health / this.MAX_HEALTH;
+        if (percent < 0.1) {
+            this.color = 0x000000;
+        } else
+        if (percent < 0.2) {
+            this.color = 0xFF0000;
+        } else {
+            if (percent < 0.5) {
+                this.color = 0xFFA500;
+            } else {
+                if (percent < 0.75) {
+                    this.color = 0x246B61;
+                } else {
+                    if (percent > 0.9) {
+                        this.color = 0x008000;
+                    }
+                }
+            }
+        }
+        this.entity.setTint(this.color);
     }
 }
