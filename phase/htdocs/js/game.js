@@ -61,6 +61,12 @@ var clouds = [];
 var etPlanets_physics;
 var etPlanets = [];
 
+/*
+    Particle emitter
+*/
+
+var particle_emitter;
+
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -85,23 +91,29 @@ function preload() {
         });
     this.load.image('cloud', 'assets/cloud.png');
     this.load.image('star', 'assets/star.png');
-    this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
+    this.load.spritesheet('etplanet',
+        ['assets/moonsprite.png', 'assets/moonsprite_n.png'], {
+            frameWidth: 435,
+            frameHeight: 435
+        });
+    this.load.atlas('flares', 'assets/particles/flares.png', 'assets/particles/flares.json');
 }
 
 function create() {
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
-    createLight(this);
+
     sky = new Sky(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.195;
     city.scaleY = 0.195;
     city.x -= 3.5;
     earth = new Earth(this, WIDTH, HEIGHT);
-    
+
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
     createPlanets(this);
+    createLight(this);
     enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
 
@@ -109,6 +121,23 @@ function create() {
     music.play();
     music.loop = true;
     // createClouds(this);
+
+    //createParticleEmitter(this);
+}
+
+function createParticleEmitter(game) {
+
+    particle_emitter = game.add.particles('flares');
+    particle_emitter.createEmitter({
+        frame: 'blue',
+        quantity: 10,
+        scale: {
+            start: 1.0,
+            end: 0
+        },
+
+
+    })
 }
 
 function createPlanets(game) {

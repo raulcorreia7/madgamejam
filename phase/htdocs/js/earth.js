@@ -1,6 +1,6 @@
 class Earth {
 
-    constructor(game,width,height) {
+    constructor(game, width, height) {
         this.entity = game.add.sprite(width / 2, height / 2, 'earth');
         this.entity.scaleX = 0.15;
         this.entity.scaleY = 0.15;
