@@ -11,17 +11,19 @@ class EtPlanet {
         this.entity.scaleY = rnd;
         this.radius = this.entity.height * this.entity.scaleY / 2;
         this.ElapsedTime = 0;
-        this.TargetTime = 10 * 1000;
+        this.TargetTime = 4 * 1000;
         this.color = 0x000000;
         this.STEP = 25;
         this.health = 0;
         this.MAX_HEALTH = 500;
+
+        this.powerup_sound = game.sound.add('powerup_planet');
     }
 
     update(deltatime) {
-        console.log(deltatime);
         this.ElapsedTime += deltatime;
         this.updateColors();
+        this.tick(deltatime);
         this.entity.angle += this.rotation_step;
     }
 
@@ -61,28 +63,39 @@ class EtPlanet {
     }
 
     heal() {
+        if (this.health == this.MAX_HEALTH) return;
         if (this.health < this.MAX_HEALTH) {
             this.health += this.STEP;
+        } else {
+            if (this.health + this.STEP > this.MAX_HEALTH) {
+                this.health = this.MAX_HEALTH;
+                this.powerup_sound.play();
+            }
+        }
+
+    }
+    tick(deltaTime) {
+        this.ElapsedTime += deltaTime;
+        if (this.ElapsedTime >= this.TargetTime) {
+            var percent = this.health / this.MAX_HEALTH;
+            this.ElapsedTime = 0;
+            if (percent >= 0.95) return;
+            if (this.health > 0)
+                this.health -= this.STEP;
         }
     }
-
-    tick(deltaTime) {
-
-
-    }
-
     updateColors() {
         var percent = this.health / this.MAX_HEALTH;
         if (percent < 0.1) {
             this.color = 0x000000;
         } else
-        if (percent < 0.2) {
+        if (percent < 0.3) {
             this.color = 0xFF0000;
         } else {
             if (percent < 0.5) {
                 this.color = 0xFFA500;
             } else {
-                if (percent < 0.75) {
+                if (percent < 0.70) {
                     this.color = 0x246B61;
                 } else {
                     if (percent > 0.9) {

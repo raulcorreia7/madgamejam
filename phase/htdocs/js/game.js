@@ -76,6 +76,7 @@ function preload() {
     this.load.image('city', 'assets/city.png');
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
+    this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
     this.load.image('ray', 'assets/star.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
@@ -111,6 +112,7 @@ function create() {
 }
 
 function createPlanets(game) {
+    //var powerup_sound = game.sound.add('powerup_planet');
     var MAX_PLANETS = Phaser.Math.Between(4, 8);
     var radius = earth.radius * 6;
 
