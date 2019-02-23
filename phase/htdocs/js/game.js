@@ -61,6 +61,11 @@ var clouds = [];
 var etPlanets_physics;
 var etPlanets = [];
 
+/*
+    Particle emitter
+*/
+
+
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -86,13 +91,18 @@ function preload() {
         });
     this.load.image('cloud', 'assets/cloud.png');
     this.load.image('star', 'assets/star.png');
-    this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
+    this.load.spritesheet('etplanet',
+        ['assets/moonsprite.png', 'assets/moonsprite_n.png'], {
+            frameWidth: 435,
+            frameHeight: 435
+        });
+    this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
 }
 
 function create() {
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
-    createLight(this);
+
     sky = new Sky(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.195;
@@ -103,6 +113,7 @@ function create() {
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
     createPlanets(this);
+    createLight(this);
     enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
 
@@ -110,8 +121,26 @@ function create() {
     music.play();
     music.loop = true;
     // createClouds(this);
+
+    createParticleEmitter(this);
 }
 
+function createParticleEmitter(game) {
+
+    var particle_emitter = game.add.particles('flares')
+        .createEmitter({
+            frame: 'yellow',
+            quantity: 1,
+            scale: {
+                start: 0.15,
+                end: 0
+            },
+            blendMode: 'ADD',
+            lifespan: 400,
+            on: false
+        });
+    return particle_emitter;
+}
 
 function createPlanets(game) {
     //var powerup_sound = game.sound.add('powerup_planet');
@@ -139,7 +168,7 @@ function createParticles(planet, game) {
     for (var i = 0; i < MAX_PARTICLES; i++) {
         var particle = new Particle(game, planet);
         particle.entity.x = planet.x() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.cos(start);
-        particle.entity.y =  planet.y() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.sin(start);
+        particle.entity.y = planet.y() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.sin(start);
         start += step;
         particle.update(planet);
     }
@@ -173,21 +202,30 @@ function update() {
         sun_rays.add(ray);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
+
+        ray.particle_emitter = createParticleEmitter(this);
         rate++;
     } else {
         rate++;
     }
     sun_rays.children.iterate((child) => {
+
+
+
+        child.particle_emitter.setPosition(child.x, child.y);
+        child.particle_emitter.explode();
         // this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
         if (RectCircleColliding(earth, child)) {
             child.disableBody(true, true);
+            child.particle_emitter.killAll();
         }
 
 
         etPlanets.forEach((planet) => {
             if (RectCircleColliding(planet, child)) {
                 child.disableBody(true, true);
+                child.particle_emitter.killAll();
                 planet.heal();
                 child.x = WIDTH * 2;
                 child.y = HEIGHT * y;
@@ -201,7 +239,9 @@ function update() {
 
         if (child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT) {
             child.disableBody(true, true);
+            child.particle_emitter.killAll();
         }
+
     });
 
     TIME = Date.now();
