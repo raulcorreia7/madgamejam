@@ -105,9 +105,10 @@ function create() {
 
     sky = new Sky(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
-    city.scaleX = 0.195;
-    city.scaleY = 0.195;
-    city.x -= 3.5;
+    city.scaleX = 0.525;
+    city.scaleY = 0.525;
+    city.x -= 4;
+    city.y += 1;
     earth = new Earth(this, WIDTH, HEIGHT);
 
     sun = new Sun(this, earth, WIDTH, HEIGHT);
@@ -145,30 +146,21 @@ function createParticleEmitter(game) {
 function createPlanets(game) {
     //var powerup_sound = game.sound.add('powerup_planet');
     var MAX_PLANETS = Phaser.Math.Between(4, 8);
-    var radius = earth.radius * 6;
+    var radius = earth.radius * 2.5;
+
+    var planets = 0;
     var step = 2 * Math.PI / MAX_PLANETS;
     var start = step * Math.random();
+    console.log(MAX_PLANETS);
     for (var i = 0; i < MAX_PLANETS; i++) {
-        var et = new EtPlanet(game);
+
+        var et = new EtPlanet(game, earth.x + Math.cos(start), earth.y - earth.radius + Math.sin(start), MAX_PLANETS);
+        et.entity.x = earth.x() + Math.cos(start) * radius;
+        et.entity.y = earth.y() + Math.sin(start) * radius;
+
         etPlanets_physics.add(et.entity);
         etPlanets.push(et);
-        et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
-        start += step;
-        createParticles(et, game);
-    }
-
-}
-
-function createParticles(planet, game) {
-    var MAX_PARTICLES = Phaser.Math.Between(10, 15);
-    var radius = planet.radius * 5;
-    var step = 2 * Math.PI / MAX_PARTICLES;
-    var start = step * Math.random();
-
-    for (var i = 0; i < MAX_PARTICLES; i++) {
-        var particle = new Particle(game, planet);
-        particle.entity.x = planet.x() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.cos(start);
-        particle.entity.y = planet.y() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.sin(start);
+        
         start += step;
         planet.addAsteroid(particle);
     }
