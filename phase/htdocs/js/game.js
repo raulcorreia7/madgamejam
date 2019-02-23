@@ -94,6 +94,10 @@ function create() {
 }
 
 function update() {
+    if (game.sound.context.state === 'suspended') {
+        game.sound.context.resume();
+    }
+
     sun.update(earth);
     player.update(earth, cursors);
 
