@@ -2,7 +2,7 @@ class Sun {
 
     constructor(game, earth, width, height) {
         this.entity = game.add.image(width - 300, 200, 'sun');
-        this.radius = earth.radius * 3;
+        this.radius = earth.radius * 4;
         this.angle = 0;
         this.light = game.lights.addLight(this.entity.x, this.entity.y,
             earth.radius * 2.75, 0xffff00, 5);

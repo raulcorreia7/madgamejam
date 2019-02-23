@@ -41,7 +41,7 @@ var etplanet;
 var player;
 var cursors;
 var rate = 0;
-var ray_cooldown = 100;
+var ray_cooldown = 20;
 
 /*
     Rays
@@ -55,6 +55,10 @@ var light_speed = 200;
 
 var clouds = [];
 
+/*
+    Et Planets
+*/
+var etPlanets_physics;
 var etPlanets = [];
 
 var cloud_properties = {
@@ -81,6 +85,7 @@ function preload() {
 }
 
 function create() {
+    etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
     createLight(this);
     sky = new Sky(this, WIDTH, HEIGHT);
@@ -106,11 +111,13 @@ function createPlanets(game) {
     var start = step * Math.random();
     for (var i = 0; i < MAX_PLANETS; i++) {
         var et = new EtPlanet(game, WIDTH, HEIGHT);
+        etPlanets_physics.add(et.entity);
         etPlanets.push(et);
         et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
         start += step;
 
     }
+
 
 
 }
@@ -126,13 +133,18 @@ function update() {
 
     if (rate == ray_cooldown) {
         rate = 0;
-    }
-    if (rate == 0) {
-        var ray = this.physics.add.sprite(sun.x(), sun.y(), 'ray');
+    } 
+    if(rate == 0){
+        var raiox = (sun.entity.width * sun.entity.scaleX) / 2;
+        var raioy = (sun.entity.height * sun.entity.scaleY) / 2;
+        var x = sun.x() - raiox + raiox* Math.random();
+        var y = sun.y() - raioy + raioy* Math.random();
+        var ray = this.physics.add.sprite(x,y, 'ray');
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
+        this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
+        this.physics.add.overlap(ray, etPlanets_physics, hitPlanet, null, this);
         sun_rays.add(ray);
-        ray.setDepth(1);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
         rate++;
@@ -140,11 +152,19 @@ function update() {
         rate++;
     }
     sun_rays.children.iterate((child) => {
-        this.physics.collide(child, game.earth, this.collisionCallback, null, this);
+        // this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
         if (RectCircleColliding(earth, child)) {
             child.disableBody(true, true);
         }
+
+
+        etPlanets.forEach((planet) => {
+            if (RectCircleColliding(planet, child)) {
+                child.disableBody(true,true);
+            }
+
+        })
 
         if (child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2) {
             this.physics.moveTo(child, this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
@@ -154,8 +174,10 @@ function update() {
             child.disableBody(true, true);
         }
     })
-    // updatePlayer();
-    // updateSun();
+}
+
+function updateRays() {
+
 }
 
 function RectCircleColliding(circle, rect) {
@@ -198,5 +220,10 @@ function createClouds(game) {
         }
         rotacao -= 90;
     }
+
+}
+
+function hitPlanet(ray, etplanet) {
+    ray.disableBody(true, true);
 
 }
