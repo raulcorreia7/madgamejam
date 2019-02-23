@@ -49,14 +49,14 @@ class Player {
 
     update(earth,cursors) {
         if (cursors.left.isDown) {
-            this.entity.x = earth.x + Math.cos(this.angle) * this.radius;
-            this.entity.y = earth.y + Math.sin(this.angle) * this.radius;
+            this.entity.x = earth.x ()+ Math.cos(this.angle) * this.radius;
+            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
             this.entity.rotation -= this.rotation_step;
             this.angle -= this.rotation_step;
             this.entity.anims.play('left', true);
         } else if (cursors.right.isDown) {
-            this.entity.x = earth.x + Math.cos(this.angle) * this.radius;
-            this.entity.y = earth.y + Math.sin(this.angle) * this.radius;
+            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
+            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
             this.entity.rotation += this.rotation_step;
             this.angle += this.rotation_step;
             this.entity.anims.play('right', true);

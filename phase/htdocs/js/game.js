@@ -50,6 +50,8 @@ var cursors;
 var raio;
 var rotation = 0.3;
 var angle = Math.PI / 2;
+var rate = 0;
+var ray_cooldown = 1000;
 
 /*
     Rays
@@ -75,7 +77,7 @@ function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
-
+    this.load.image('ray', 'assets/star.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -91,6 +93,7 @@ function create() {
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
+    sun_rays = this.add.group();
 
     // createClouds(this);
 }
@@ -98,6 +101,29 @@ function create() {
 function update() {
     sun.update(earth);
     player.update(earth,cursors);
+
+    if(rate == ray_cooldown){
+        rate = 0;
+    } 
+    if(rate == 0){
+        var ray = this.physics.add.sprite(sun.x, sun.y, 'ray');
+
+        this.physics.moveTo(ray, earth.x(), earth.y(), 300);
+        sun_rays.add(ray);
+        ray.setDepth(1);
+        earth.entity.setDepth(2);
+        player.entity.setDepth(3);
+        rate++;
+    }  else {
+        rate++;
+    }
+    sun_rays.children.iterate((child) => {
+        this.physics.collide(child, game.earth, this.collisionCallback, null, this);
+
+        if(child.x > earth.x() - 15 && child.x < earth.x() + 15 && child.y > earth.y() - 15 && child.y < earth.y() + 15){
+            child.disableBody(true,true);
+        }
+    })
     // updatePlayer();
     // updateSun();
 }
