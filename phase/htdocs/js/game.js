@@ -26,14 +26,10 @@ var config = {
 var game = new Phaser.Game(config);
 
 
+//Gameobjects
+
 //The sun
 var sun;
-
-var sun_properties = {
-    radius: 0,
-    angle: 0,
-    light: 0
-}
 //Earth
 var earth;
 //Sky
@@ -41,15 +37,12 @@ var sky;
 
 // Player
 var player;
-var player_properties = {
-    radius: 0,
-    angle: 0,
-    rotation_step: Math.PI / 256
-};
 var cursors;
 var raio;
 var rotation = 0.3;
 var angle = Math.PI / 2;
+var rate = 0;
+var ray_cooldown = 1000;
 
 /*
     Rays
@@ -76,6 +69,7 @@ function preload() {
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
+    this.load.image('ray', 'assets/star.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -91,6 +85,7 @@ function create() {
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
+    sun_rays = this.add.group();
 
     let music = this.sound.add('music');
     music.play();
@@ -99,39 +94,30 @@ function create() {
 
 function update() {
     sun.update(earth);
-    player.update(earth,cursors);
-    // updatePlayer();
-    // updateSun();
-}
+    player.update(earth, cursors);
 
-function updateSun() {
-    sun.x = earth.x() + Math.cos(sun_properties.angle) * sun_properties.radius;
-    sun.y = earth.y() + Math.sin(sun_properties.angle) * sun_properties.radius;
-    sun_properties.angle += Math.PI / 512;
-    sun_properties.light.x = sun.x;
-    sun_properties.light.y = sun.y;
-}
-
-function updatePlayer() {
-    if (cursors.left.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation -= player_properties.rotation_step;
-        player_properties.angle -= player_properties.rotation_step;
-
-
-        player.anims.play('left', true);
-    } else if (cursors.right.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation += player_properties.rotation_step;
-        player_properties.angle += player_properties.rotation_step;
-        player.anims.play('right', true);
-    } else {
-        // player.setVelocityX(0);
-        player.anims.play('turn');
+    if (rate == ray_cooldown) {
+        rate = 0;
     }
+    if (rate == 0) {
+        var ray = this.physics.add.sprite(sun.x, sun.y, 'ray');
 
+        this.physics.moveTo(ray, earth.x(), earth.y(), 300);
+        sun_rays.add(ray);
+        ray.setDepth(1);
+        earth.entity.setDepth(2);
+        player.entity.setDepth(3);
+        rate++;
+    } else {
+        rate++;
+    }
+    sun_rays.children.iterate((child) => {
+        this.physics.collide(child, game.earth, this.collisionCallback, null, this);
+
+        if (child.x > earth.x() - 15 && child.x < earth.x() + 15 && child.y > earth.y() - 15 && child.y < earth.y() + 15) {
+            child.disableBody(true, true);
+        }
+    })
 }
 
 function createLight(game) {
