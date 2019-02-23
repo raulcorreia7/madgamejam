@@ -162,6 +162,7 @@ function createPlanets(game) {
         etPlanets.push(et);
 
         start += step;
+        planet.addAsteroid(particle);
     }
 }
 function update() {
