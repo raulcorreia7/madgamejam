@@ -85,52 +85,21 @@ function preload() {
 }
 
 function create() {
+    cursors = this.input.keyboard.createCursorKeys();
     createLight(this);
-    createPlayerAnimations(this);
     sky = new Sky(this, WIDTH, HEIGHT);
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
+    player = new Player(this, earth);
 
-    // createPlayer(this);
     // createClouds(this);
-    cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
     sun.update(earth);
+    player.update(earth,cursors);
     // updatePlayer();
     // updateSun();
-}
-
-function createPlayerAnimations(game) {
-    game.anims.create({
-        key: 'left',
-        frames: game.anims.generateFrameNumbers('player', {
-            start: 0,
-            end: 3
-        }),
-        frameRate: 10,
-        repeat: -1
-    });
-
-    game.anims.create({
-        key: 'turn',
-        frames: [{
-            key: 'player',
-            frame: 4
-        }],
-        frameRate: 20
-    });
-
-    game.anims.create({
-        key: 'right',
-        frames: game.anims.generateFrameNumbers('player', {
-            start: 5,
-            end: 8
-        }),
-        frameRate: 10,
-        repeat: -1
-    });
 }
 
 function updateSun() {
@@ -165,20 +134,6 @@ function updatePlayer() {
 
 function createLight(game) {
     game.lights.enable().setAmbientColor(0xADD8E6);
-}
-
-function createPlayer(game) {
-    player = game.physics.add.sprite(earth.x, earth.y - raio, 'player');
-
-
-    player.y -= player.height / 2;
-    player_properties.radius = raio + player.height / 2;
-    player_properties.angle = 0;
-
-    player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-    player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-    player.rotation = Math.PI / 2;
-    player.setCollideWorldBounds(true);
 }
 
 function createClouds(game) {
