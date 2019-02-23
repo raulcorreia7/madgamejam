@@ -85,10 +85,16 @@ function preload() {
     this.load.image('ray', 'assets/star.png');
     this.load.image('rock', 'assets/rock.png');
     this.load.spritesheet('player',
-        'assets/dude.png', {
-            frameWidth: 32,
-            frameHeight: 48
+        'assets/player.png', {
+            frameWidth: 50,
+            frameHeight: 100
         });
+    this.load.spritesheet('enemy',
+        'assets/enemy.png', {
+            frameWidth: 50,
+            frameHeight: 100
+        });
+    this.load.image('hand', 'assets/hand.png')
     this.load.image('cloud', 'assets/cloud.png');
     this.load.image('star', 'assets/star.png');
     this.load.spritesheet('etplanet',

@@ -5,7 +5,7 @@ class Enemy {
 
         game.anims.create({
             key: 'left',
-            frames: game.anims.generateFrameNumbers('player', {
+            frames: game.anims.generateFrameNumbers('enemy', {
                 start: 0,
                 end: 3
             }),
@@ -14,7 +14,7 @@ class Enemy {
         });
         game.anims.create({
             key: 'right',
-            frames: game.anims.generateFrameNumbers('player', {
+            frames: game.anims.generateFrameNumbers('enemy', {
                 start: 5,
                 end: 8
             }),
@@ -22,7 +22,7 @@ class Enemy {
             repeat: -1
         });
 
-        this.entity = game.physics.add.sprite(earth.x, earth.y - earth.radius, 'player');
+        this.entity = game.physics.add.sprite(earth.x, earth.y - earth.radius, 'enemy');
 
         this.entity.y -= this.entity.height / 2;
         this.radius = earth.radius + this.entity.height / 2;
