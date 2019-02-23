@@ -112,6 +112,7 @@ function create() {
 }
 
 function createPlanets(game) {
+    //var powerup_sound = game.sound.add('powerup_planet');
     var MAX_PLANETS = Phaser.Math.Between(4, 8);
     var radius = earth.radius * 6;
 

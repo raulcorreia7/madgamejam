@@ -63,21 +63,17 @@ class EtPlanet {
     }
 
     heal() {
-        var before_percentage = this.health / this.MAX_HEALTH;
+        if (this.health == this.MAX_HEALTH) return;
         if (this.health < this.MAX_HEALTH) {
             this.health += this.STEP;
-        }
-        var after_percentage = this.health / this.MAX_HEALTH;
-        if (before_percentage == after_percentage)
-            return;
-        else {
-            var dif = after_percentage - before_percentage;
-            if (dif >= 0.2) {
+        } else {
+            if (this.health + this.STEP > this.MAX_HEALTH) {
+                this.health = this.MAX_HEALTH;
                 this.powerup_sound.play();
             }
         }
-    }
 
+    }
     tick(deltaTime) {
         this.ElapsedTime += deltaTime;
         if (this.ElapsedTime >= this.TargetTime) {
@@ -87,11 +83,7 @@ class EtPlanet {
             if (this.health > 0)
                 this.health -= this.STEP;
         }
-
-
-
     }
-
     updateColors() {
         var percent = this.health / this.MAX_HEALTH;
         if (percent < 0.1) {
