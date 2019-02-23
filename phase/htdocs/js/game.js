@@ -65,7 +65,6 @@ var etPlanets = [];
     Particle emitter
 */
 
-
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -74,6 +73,11 @@ var cloud_properties = {
 
 var TIME = Date.now();
 
+/*
+    NyanCat
+*/
+
+var nyanCat;
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
@@ -97,9 +101,14 @@ function preload() {
             frameHeight: 435
         });
     this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
+    this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
+        frameWidth: 500,
+        frameHeight: 198
+    });
 }
 
 function create() {
+    nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -151,7 +160,7 @@ function createPlanets(game) {
     var planets = 0;
     var step = 2 * Math.PI / MAX_PLANETS;
     var start = step * Math.random();
-    console.log(MAX_PLANETS);
+    //console.log(MAX_PLANETS);
     for (var i = 0; i < MAX_PLANETS; i++) {
 
         var et = new EtPlanet(game, earth.x + Math.cos(start), earth.y - earth.radius + Math.sin(start), MAX_PLANETS);
@@ -165,6 +174,7 @@ function createPlanets(game) {
         planet.addAsteroid(particle);
     }
 }
+
 function update() {
 
     var deltaTime = Date.now() - TIME;
@@ -234,7 +244,7 @@ function update() {
         }
 
     });
-
+    nyanCat.update(deltaTime);
     TIME = Date.now();
 }
 
