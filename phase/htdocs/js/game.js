@@ -162,6 +162,12 @@ function createPlanets(game) {
         etPlanets.push(et);
 
         start += step;
+
+        // var MAX_PARTICLES = Phaser.Math.Between(10, 15);
+        // var step = 2 * Math.PI / MAX_PARTICLES;
+        // var start = step * Math.random();
+        // for (var i = 0; i < MAX_PARTICLES; i++) {
+        // }
         let particle = new Particle(game, et);
         et.addAsteroid(particle);
     }
