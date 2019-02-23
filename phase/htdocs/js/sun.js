@@ -1,22 +1,17 @@
 class Sun {
 
-    constructor(game) {
-        this.entity = game.load.image('sun', 'assets/sun.png');
-
-        this.properties = {
-            radius: 0,
-            angle: 0,
-            light: 0,
-        };
-
-        this.radius = 0;
+    constructor(game,earth,width,height) {
+        this.entity = game.add.image(width - 300, 200, 'sun');
+        this.radius = earth.radius * 3;
         this.angle = 0;
-        this.light = 0;
-
-        this.ANGLE_STEP = MATH.PI / 512;
+        this.light = game.lights.addLight(this.entity.x, this.entity.y,
+            earth.radius * 2.75, 0xffff00, 5);
+        this.entity.scaleX = 0.5;
+        this.entity.scaleY = 0.5;
+        this.ANGLE_STEP = Math.PI / 512;
     }
 
-    updateSun(earth) {
+    update(earth) {
         this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
         this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
         this.angle += this.ANGLE_STEP;

@@ -85,19 +85,21 @@ function preload() {
 }
 
 function create() {
+    createLight(this);
     createPlayerAnimations(this);
     sky = new Sky(this, WIDTH, HEIGHT);
-    createEarth(this);
-    createSun(this);
-    createLight(this);
-    createPlayer(this);
-    createClouds(this);
+    earth = new Earth(this, WIDTH, HEIGHT);
+    sun = new Sun(this, earth, WIDTH, HEIGHT);
+
+    // createPlayer(this);
+    // createClouds(this);
     cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
-    updatePlayer();
-    updateSun();
+    sun.update(earth);
+    // updatePlayer();
+    // updateSun();
 }
 
 function createPlayerAnimations(game) {
@@ -132,8 +134,8 @@ function createPlayerAnimations(game) {
 }
 
 function updateSun() {
-    sun.x = earth.x + Math.cos(sun_properties.angle) * sun_properties.radius;
-    sun.y = earth.y + Math.sin(sun_properties.angle) * sun_properties.radius;
+    sun.x = earth.x() + Math.cos(sun_properties.angle) * sun_properties.radius;
+    sun.y = earth.y() + Math.sin(sun_properties.angle) * sun_properties.radius;
     sun_properties.angle += Math.PI / 512;
     sun_properties.light.x = sun.x;
     sun_properties.light.y = sun.y;
@@ -161,16 +163,6 @@ function updatePlayer() {
 
 }
 
-function createEarth(game) {
-    earth = game.add.sprite(config.width / 2, config.height / 2, 'earth');
-    earth.scaleX = 0.25;
-    earth.scaleY = 0.25;
-    raio = ((earth.height * earth.scaleY) / 2);
-    earth.setPipeline('Light2D');
-
-
-}
-
 function createLight(game) {
     game.lights.enable().setAmbientColor(0xADD8E6);
 }
@@ -188,17 +180,6 @@ function createPlayer(game) {
     player.rotation = Math.PI / 2;
     player.setCollideWorldBounds(true);
 }
-
-function createSun(game) {
-    sun = game.add.image(config.width - 300, 200, 'sun');
-    this.sun_properties.radius = raio * 3;
-    this.sun_properties.angle = 0;
-    this.sun_properties.light = game.lights.addLight(sun.x, sun.y,
-        raio * 2.75, 0xffff00, 5);
-    sun.scaleX = 0.5;
-    sun.scaleY = 0.5;
-}
-
 
 function createClouds(game) {
     var cloud_radius = raio * 1.9;
