@@ -26,26 +26,19 @@ var config = {
 var game = new Phaser.Game(config);
 
 
+//Gameobjects
+
 //The sun
 var sun;
-
-var sun_properties = {
-    radius: 0,
-    angle: 0,
-    light: 0
-}
 //Earth
 var earth;
 //Sky
 var sky;
 
+var etplanet;
+
 // Player
 var player;
-var player_properties = {
-    radius: 0,
-    angle: 0,
-    rotation_step: Math.PI / 256
-};
 var cursors;
 var rate = 0;
 var ray_cooldown = 100;
@@ -62,6 +55,8 @@ var light_speed = 200;
 
 var clouds = [];
 
+var etPlanets = [];
+
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -73,6 +68,7 @@ function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
+    this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.image('ray', 'assets/star.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
@@ -80,6 +76,8 @@ function preload() {
             frameHeight: 48
         });
     this.load.image('cloud', 'assets/cloud.png');
+    this.load.image('star', 'assets/sky.png');
+    this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
 }
 
 function create() {
@@ -89,16 +87,31 @@ function create() {
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
+    //etplanet = new EtPlanet(this, WIDTH, HEIGHT);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[0].setPos(0,0);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[1].setPos(0,HEIGHT);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[2].setPos(WIDTH,HEIGHT);
     sun_rays = this.add.group();
 
+    let music = this.sound.add('music');
+    music.play();
+    music.loop = true;
     // createClouds(this);
 }
 
 function update() {
-    sun.update(earth);
-    player.update(earth,cursors);
+    if (game.sound.context.state === 'suspended') {
+        game.sound.context.resume();
+    }
 
-    if(rate == ray_cooldown){
+    sun.update(earth);
+    player.update(earth, cursors);
+    etPlanets.forEach(e => e.update());
+
+    if (rate == ray_cooldown) {
         rate = 0;
     } 
     if(rate == 0){
@@ -110,7 +123,7 @@ function update() {
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
         rate++;
-    }  else {
+    } else {
         rate++;
     }
     sun_rays.children.iterate((child) => {
@@ -145,36 +158,6 @@ function RectCircleColliding(circle,rect){
     var dx=distX-rect.width/2;
     var dy=distY-rect.height/2;
     return (dx*dx+dy*dy<=(circle.radius*circle.radius));
-}
-
-function updateSun() {
-    sun.x = earth.x() + Math.cos(sun_properties.angle) * sun_properties.radius;
-    sun.y = earth.y() + Math.sin(sun_properties.angle) * sun_properties.radius;
-    sun_properties.angle += Math.PI / 512;
-    sun_properties.light.x = sun.x;
-    sun_properties.light.y = sun.y;
-}
-
-function updatePlayer() {
-    if (cursors.left.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation -= player_properties.rotation_step;
-        player_properties.angle -= player_properties.rotation_step;
-
-
-        player.anims.play('left', true);
-    } else if (cursors.right.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation += player_properties.rotation_step;
-        player_properties.angle += player_properties.rotation_step;
-        player.anims.play('right', true);
-    } else {
-        // player.setVelocityX(0);
-        player.anims.play('turn');
-    }
-
 }
 
 function createLight(game) {
