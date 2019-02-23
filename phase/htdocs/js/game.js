@@ -65,7 +65,6 @@ var etPlanets = [];
     Particle emitter
 */
 
-var particle_emitter;
 
 var cloud_properties = {
     STEP: Math.PI / 2,
@@ -97,7 +96,7 @@ function preload() {
             frameWidth: 435,
             frameHeight: 435
         });
-    this.load.atlas('flares', 'assets/particles/flares.png', 'assets/particles/flares.json');
+    this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
 }
 
 function create() {
@@ -123,26 +122,24 @@ function create() {
     music.loop = true;
     // createClouds(this);
 
-    //createParticleEmitter(this);
+    createParticleEmitter(this);
 }
 
 function createParticleEmitter(game) {
 
-    particle_emitter = game.add.particles('flares');
-    particle_emitter.createEmitter({
-        frame: 'blue',
-        quantity: 10,
-        scale: {
-            start: 1.0,
-            end: 0
-        },
-
-
-    })
-}
-
-function createParticles(planet){
-
+    var particle_emitter = game.add.particles('flares')
+        .createEmitter({
+            frame: 'yellow',
+            quantity: 1,
+            scale: {
+                start: 0.15,
+                end: 0
+            },
+            blendMode: 'ADD',
+            lifespan: 400,
+            on: false
+        });
+    return particle_emitter;
 }
 
 function createPlanets(game) {
@@ -159,7 +156,7 @@ function createPlanets(game) {
         etPlanets.push(et);
         et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
         start += step;
-        
+
     }
 }
 
@@ -191,21 +188,30 @@ function update() {
         sun_rays.add(ray);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
+
+        ray.particle_emitter = createParticleEmitter(this);
         rate++;
     } else {
         rate++;
     }
     sun_rays.children.iterate((child) => {
+
+
+
+        child.particle_emitter.setPosition(child.x, child.y);
+        child.particle_emitter.explode();
         // this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
         if (RectCircleColliding(earth, child)) {
             child.disableBody(true, true);
+            child.particle_emitter.killAll();
         }
 
 
         etPlanets.forEach((planet) => {
             if (RectCircleColliding(planet, child)) {
                 child.disableBody(true, true);
+                child.particle_emitter.killAll();
                 planet.heal();
                 child.x = WIDTH * 2;
                 child.y = HEIGHT * y;
@@ -219,7 +225,9 @@ function update() {
 
         if (child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT) {
             child.disableBody(true, true);
+            child.particle_emitter.killAll();
         }
+
     });
 
     TIME = Date.now();
