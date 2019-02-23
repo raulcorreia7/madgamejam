@@ -78,6 +78,7 @@ function preload() {
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
     this.load.image('ray', 'assets/star.png');
+    this.load.image('rock', 'assets/rock.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -111,6 +112,10 @@ function create() {
     // createClouds(this);
 }
 
+function createParticles(planet){
+
+}
+
 function createPlanets(game) {
     //var powerup_sound = game.sound.add('powerup_planet');
     var MAX_PLANETS = Phaser.Math.Between(4, 8);
@@ -125,7 +130,7 @@ function createPlanets(game) {
         etPlanets.push(et);
         et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
         start += step;
-
+        
     }
 }
 
