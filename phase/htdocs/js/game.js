@@ -171,7 +171,8 @@ function createPlanets(game) {
         etPlanets.push(et);
 
         start += step;
-        planet.addAsteroid(particle);
+        let particle = new Particle(game, et);
+        et.addAsteroid(particle);
     }
 }
 
