@@ -40,17 +40,14 @@ var etplanet;
 // Player
 var player;
 var cursors;
-var raio;
-var rotation = 0.3;
-var angle = Math.PI / 2;
 var rate = 0;
-var ray_cooldown = 1000;
+var ray_cooldown = 100;
 
 /*
     Rays
 */
 var sun_rays;
-
+var light_speed = 200;
 
 /*
     Clouds
@@ -66,7 +63,6 @@ var cloud_properties = {
     ROTATION_STEP: Math.PI / 128
 }
 
-var rotation;
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
@@ -123,11 +119,11 @@ function update() {
 
     if (rate == ray_cooldown) {
         rate = 0;
-    }
-    if (rate == 0) {
-        var ray = this.physics.add.sprite(sun.x, sun.y, 'ray');
+    } 
+    if(rate == 0){
+        var ray = this.physics.add.sprite(sun.x(), sun.y(), 'ray');
 
-        this.physics.moveTo(ray, earth.x(), earth.y(), 300);
+        this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
         sun_rays.add(ray);
         ray.setDepth(1);
         earth.entity.setDepth(2);
@@ -139,10 +135,35 @@ function update() {
     sun_rays.children.iterate((child) => {
         this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
-        if (child.x > earth.x() - 15 && child.x < earth.x() + 15 && child.y > earth.y() - 15 && child.y < earth.y() + 15) {
-            child.disableBody(true, true);
+        if(RectCircleColliding(earth, child)){
+            child.disableBody(true,true);
+        }
+
+        if(child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2){
+            this.physics.moveTo(child,this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
+        }
+
+        if(child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT){
+            child.disableBody(true,true);
         }
     })
+    // updatePlayer();
+    // updateSun();
+}
+
+function RectCircleColliding(circle,rect){
+    var distX = Math.abs(circle.x() - rect.x-rect.width/2);
+    var distY = Math.abs(circle.y() - rect.y-rect.height/2);
+
+    if (distX > (rect.width/2 + circle.radius)) { return false; }
+    if (distY > (rect.height/2 + circle.radius)) { return false; }
+
+    if (distX <= (rect.weight/2)) { return true; } 
+    if (distY <= (rect.height/2)) { return true; }
+
+    var dx=distX-rect.width/2;
+    var dy=distY-rect.height/2;
+    return (dx*dx+dy*dy<=(circle.radius*circle.radius));
 }
 
 function createLight(game) {

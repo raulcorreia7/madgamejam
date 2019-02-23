@@ -47,6 +47,14 @@ class Player {
         return this.entity.y;
     }
 
+    width() {
+        return this.entity.width;
+    }
+
+    height(){
+        return this.entity.height;
+    }
+
     update(earth,cursors) {
         if (cursors.left.isDown) {
             this.entity.x = earth.x ()+ Math.cos(this.angle) * this.radius;
