@@ -75,6 +75,7 @@ function preload() {
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
+    this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
     this.load.image('ray', 'assets/star.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
