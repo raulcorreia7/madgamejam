@@ -2,8 +2,7 @@ class Enemy {
     constructor(game, earth, player) {
         this.counterstep = 0;
         this.direction = Math.random();
-        console.log(this.direction);
-
+ 
         game.anims.create({
             key: 'left',
             frames: game.anims.generateFrameNumbers('player', {
@@ -27,11 +26,11 @@ class Enemy {
 
         this.entity.y -= this.entity.height / 2;
         this.radius = earth.radius + this.entity.height / 2;
-        this.angle = 0;
+        this.angle = player.angle + Math.PI;
 
         this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
         this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-        this.entity.rotation = Math.PI / 2;
+        this.entity.rotation = - Math.PI / 2 ;
         this.entity.setCollideWorldBounds(true);
         this.rotation_step = Math.PI / 256;
     }
@@ -54,20 +53,18 @@ class Enemy {
     update(earth) {
         //Left
         if (this.direction < 0.5) {
-            this.direction = 'left';
-            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
-            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-            this.entity.rotation -= this.rotation_step;
-            this.angle -= this.rotation_step;
-            this.entity.anims.play('left', true);
-        //Right
-        } else {
-            this.direction = 'right';
             this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
             this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
             this.entity.rotation += this.rotation_step;
             this.angle += this.rotation_step;
             this.entity.anims.play('right', true);
+        //Right
+        } else {
+            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
+            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
+            this.entity.rotation -= this.rotation_step;
+            this.angle -= this.rotation_step;
+            this.entity.anims.play('left', true);
         }
     }
 }
