@@ -10,7 +10,7 @@ class Earth {
     }
 
     update() {
-        //nothing :D, Miguel é um banana
+        //nothing :D, Raúl é um banana
     }
 
     x() {

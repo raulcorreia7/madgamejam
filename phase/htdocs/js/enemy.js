@@ -1,8 +1,8 @@
 class Enemy {
     constructor(game, earth, player) {
-        cooldown = 10;
-        counterstep = 0;
-        direction = Math.random();
+        this.counterstep = 0;
+        this.direction = Math.random();
+        console.log(this.direction);
 
         game.anims.create({
             key: 'left',
@@ -52,32 +52,22 @@ class Enemy {
     }
 
     update(earth) {
-
-        if (this.counterstep == this.cooldown) {
-            this.counterstep = 0;
-        }
-        if (this.counterstep == 0) {
-            //Left
-            if (this.direction < 0.5) {
-                this.direction = 'left';
-                this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
-                this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-                this.entity.rotation -= this.rotation_step;
-                this.angle -= this.rotation_step;
-                this.entity.anims.play('left', true);
-                this.counterstep++;
-                //Right
-            } else {
-                this.direction = 'right';
-                this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
-                this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-                this.entity.rotation += this.rotation_step;
-                this.angle += this.rotation_step;
-                this.entity.anims.play('right', true);
-                this.counterstep++;
-            }
-        }else{
-            this.counterstep++;
+        //Left
+        if (this.direction < 0.5) {
+            this.direction = 'left';
+            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
+            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
+            this.entity.rotation -= this.rotation_step;
+            this.angle -= this.rotation_step;
+            this.entity.anims.play('left', true);
+        //Right
+        } else {
+            this.direction = 'right';
+            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
+            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
+            this.entity.rotation += this.rotation_step;
+            this.angle += this.rotation_step;
+            this.entity.anims.play('right', true);
         }
     }
 }

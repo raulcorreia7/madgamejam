@@ -126,9 +126,10 @@ function update() {
     if (game.sound.context.state === 'suspended') {
         game.sound.context.resume();
     }
-
+    
     sun.update(earth);
     player.update(earth, cursors);
+    enemy.update(earth);
     etPlanets.forEach(e => e.update());
 
     if (rate == ray_cooldown) {
@@ -166,7 +167,7 @@ function update() {
 
         })
 
-        if (child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2) {
+        if (child.x >= player.x() - player.width() / 2 && child.x <= player.x() + player.width() / 2 && child.y >= player.y() - player.height() / 2 && child.y <= player.y() + player.height() / 2) {
             this.physics.moveTo(child, this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
         }
 
@@ -184,17 +185,17 @@ function RectCircleColliding(circle, rect) {
     var distX = Math.abs(circle.x() - rect.x - rect.width / 2);
     var distY = Math.abs(circle.y() - rect.y - rect.height / 2);
 
-    if (distX > (rect.width / 2 + circle.radius)) {
+    if (distX >= (rect.width / 2 + circle.radius)) {
         return false;
     }
-    if (distY > (rect.height / 2 + circle.radius)) {
+    if (distY >= (rect.height / 2 + circle.radius)) {
         return false;
     }
 
-    if (distX <= (rect.weight / 2)) {
+    if (distX < (rect.weight / 2)) {
         return true;
     }
-    if (distY <= (rect.height / 2)) {
+    if (distY < (rect.height / 2)) {
         return true;
     }
 
