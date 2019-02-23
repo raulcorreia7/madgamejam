@@ -18,6 +18,8 @@ class EtPlanet {
         this.MAX_HEALTH = 500;
 
         this.powerup_sound = game.sound.add('powerup_planet');
+
+        this.asteroids = [];
     }
 
     update(deltatime) {
@@ -25,6 +27,10 @@ class EtPlanet {
         this.updateColors();
         this.tick(deltatime);
         this.entity.angle += this.rotation_step;
+    }
+
+    addAsteroid(particle){
+        this.asteroids.add(particle);
     }
 
     setPos(x, y) {
