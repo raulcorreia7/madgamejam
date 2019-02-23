@@ -90,7 +90,10 @@ function preload() {
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
-    this.load.image('ray', 'assets/light.png');
+    this.load.spritesheet('ray', 'assets/light.png', {
+        frameWidth: 24,
+        frameHeight: 24
+    });
     this.load.image('rock', 'assets/rock.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
@@ -108,8 +111,8 @@ function preload() {
 }
 
 function create() {
-    
-    
+
+
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -206,7 +209,18 @@ function update() {
         var raioy = (sun.entity.height * sun.entity.scaleY) / 2;
         var x = sun.x() - raiox + raiox * Math.random();
         var y = sun.y() - raioy + raioy * Math.random();
-        var ray = this.physics.add.sprite(x, y, 'ray');
+        var ray = this.physics.add.sprite(x, y, 'ray', 0);
+        ray.SPRITE_INDEX = 0;
+        ray.ELLAPSED_TIME = 0;
+        ray.TARGET_TIME = 0.02 * 1000;
+        ray.update = () => {
+            ray.ELLAPSED_TIME += deltaTime;
+            if (ray.ELLAPSED_TIME >= ray.TARGET_TIME) {
+                ray.ELLAPSED_TIME = 0;
+                ray.SPRITE_INDEX = (++ray.SPRITE_INDEX % 3);
+                ray.setFrame(ray.SPRITE_INDEX);
+            }
+        }
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
         this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
@@ -221,6 +235,7 @@ function update() {
         rate++;
     }
     sun_rays.children.iterate((child) => {
+        child.update();
 
 
 
