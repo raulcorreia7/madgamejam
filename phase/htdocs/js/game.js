@@ -125,9 +125,6 @@ function createPlanets(game) {
         start += step;
 
     }
-
-
-
 }
 
 function update() {
