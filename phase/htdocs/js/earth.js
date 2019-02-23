@@ -6,6 +6,7 @@ class Earth {
         this.entity.scaleY = 0.25;
         this.radius = ((this.entity.height * this.entity.scaleY) / 2);
         this.entity.setPipeline('Light2D');
+
     }
 
     update() {

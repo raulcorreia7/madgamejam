@@ -35,6 +35,8 @@ var earth;
 //Sky
 var sky;
 
+var etplanet;
+
 // Player
 var player;
 var cursors;
@@ -56,6 +58,8 @@ var sun_rays;
 
 var clouds = [];
 
+var etPlanets = [];
+
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -76,6 +80,8 @@ function preload() {
             frameHeight: 48
         });
     this.load.image('cloud', 'assets/cloud.png');
+    this.load.image('star', 'assets/sky.png');
+    this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
 }
 
 function create() {
@@ -85,6 +91,13 @@ function create() {
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
+    //etplanet = new EtPlanet(this, WIDTH, HEIGHT);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[0].setPos(0,0);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[1].setPos(0,HEIGHT);
+    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
+    etPlanets[2].setPos(WIDTH,HEIGHT);
     sun_rays = this.add.group();
 
     let music = this.sound.add('music');
@@ -100,6 +113,7 @@ function update() {
 
     sun.update(earth);
     player.update(earth, cursors);
+    etPlanets.forEach(e => e.update());
 
     if (rate == ray_cooldown) {
         rate = 0;
