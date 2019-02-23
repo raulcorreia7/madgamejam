@@ -17,7 +17,7 @@ class EtPlanet {
         this.health = 0;
         this.MAX_HEALTH = 500;
 
-        this.powerup_sound = game.sound.add('music');
+        this.powerup_sound = game.sound.add('powerup_planet');
     }
 
     update(deltatime) {
@@ -63,8 +63,18 @@ class EtPlanet {
     }
 
     heal() {
+        var before_percentage = this.health / this.MAX_HEALTH;
         if (this.health < this.MAX_HEALTH) {
             this.health += this.STEP;
+        }
+        var after_percentage = this.health / this.MAX_HEALTH;
+        if (before_percentage == after_percentage)
+            return;
+        else {
+            var dif = after_percentage - before_percentage;
+            if (dif >= 0.2) {
+                this.powerup_sound.play();
+            }
         }
     }
 
@@ -93,7 +103,7 @@ class EtPlanet {
             if (percent < 0.5) {
                 this.color = 0xFFA500;
             } else {
-                if (percent < 0.75) {
+                if (percent < 0.70) {
                     this.color = 0x246B61;
                 } else {
                     if (percent > 0.9) {
