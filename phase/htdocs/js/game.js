@@ -90,7 +90,7 @@ function preload() {
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
-    this.load.image('ray', 'assets/star.png');
+    this.load.image('ray', 'assets/light.png');
     this.load.image('rock', 'assets/rock.png');
     this.load.spritesheet('player',
         'assets/dude.png', {
@@ -98,7 +98,7 @@ function preload() {
             frameHeight: 48
         });
     this.load.image('cloud', 'assets/cloud.png');
-    this.load.image('star', 'assets/star.png');
+    this.load.image('star', 'assets/light.png');
     this.load.spritesheet('etplanet',
         'assets/moonsprite.png', {
             frameWidth: 435,

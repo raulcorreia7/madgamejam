@@ -3,8 +3,8 @@ class NyanCat {
     constructor(game, width, height) {
         this.entity = game.add.sprite(-100, height / 2, 'nyancat', 0);
         this.MAX_FRAMES = 12;
-        this.entity.scaleX = 0.3;
-        this.entity.scaleY = 0.3;
+        this.entity.scaleX = 0.2;
+        this.entity.scaleY = 0.2;
         this.velocity = 10;
         this.TIME_INTERVAL = 0.05 * 1000;
         this.ElapsedTime = 0;
