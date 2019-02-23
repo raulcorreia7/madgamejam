@@ -76,7 +76,7 @@ function preload() {
             frameHeight: 48
         });
     this.load.image('cloud', 'assets/cloud.png');
-    this.load.image('star', 'assets/sky.png');
+    this.load.image('star', 'assets/star.png');
     this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
 }
 
@@ -98,13 +98,20 @@ function create() {
 }
 
 function createPlanets(game) {
-    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
-    var et = etPlanets[0];
-    et.setPos(et.halfWidth(), et.halfHeight());
-    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
-    etPlanets[1].setPos(0, HEIGHT);
-    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
-    etPlanets[2].setPos(WIDTH, HEIGHT);
+    var MAX_PLANETS = Phaser.Math.Between(4, 8);
+    var radius = earth.radius * 6;
+
+    var planets = 0;
+    var step = 2 * Math.PI / MAX_PLANETS;
+    var start = step * Math.random();
+    for (var i = 0; i < MAX_PLANETS; i++) {
+        var et = new EtPlanet(game, WIDTH, HEIGHT);
+        etPlanets.push(et);
+        et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
+        start += step;
+
+    }
+
 
 }
 
@@ -119,8 +126,8 @@ function update() {
 
     if (rate == ray_cooldown) {
         rate = 0;
-    } 
-    if(rate == 0){
+    }
+    if (rate == 0) {
         var ray = this.physics.add.sprite(sun.x(), sun.y(), 'ray');
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
@@ -135,35 +142,43 @@ function update() {
     sun_rays.children.iterate((child) => {
         this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
-        if(RectCircleColliding(earth, child)){
-            child.disableBody(true,true);
+        if (RectCircleColliding(earth, child)) {
+            child.disableBody(true, true);
         }
 
-        if(child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2){
-            this.physics.moveTo(child,this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
+        if (child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2) {
+            this.physics.moveTo(child, this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
         }
 
-        if(child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT){
-            child.disableBody(true,true);
+        if (child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT) {
+            child.disableBody(true, true);
         }
     })
     // updatePlayer();
     // updateSun();
 }
 
-function RectCircleColliding(circle,rect){
-    var distX = Math.abs(circle.x() - rect.x-rect.width/2);
-    var distY = Math.abs(circle.y() - rect.y-rect.height/2);
+function RectCircleColliding(circle, rect) {
+    var distX = Math.abs(circle.x() - rect.x - rect.width / 2);
+    var distY = Math.abs(circle.y() - rect.y - rect.height / 2);
 
-    if (distX > (rect.width/2 + circle.radius)) { return false; }
-    if (distY > (rect.height/2 + circle.radius)) { return false; }
+    if (distX > (rect.width / 2 + circle.radius)) {
+        return false;
+    }
+    if (distY > (rect.height / 2 + circle.radius)) {
+        return false;
+    }
 
-    if (distX <= (rect.weight/2)) { return true; } 
-    if (distY <= (rect.height/2)) { return true; }
+    if (distX <= (rect.weight / 2)) {
+        return true;
+    }
+    if (distY <= (rect.height / 2)) {
+        return true;
+    }
 
-    var dx=distX-rect.width/2;
-    var dy=distY-rect.height/2;
-    return (dx*dx+dy*dy<=(circle.radius*circle.radius));
+    var dx = distX - rect.width / 2;
+    var dy = distY - rect.height / 2;
+    return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
 
 function createLight(game) {

@@ -1,13 +1,13 @@
 class Sun {
 
-    constructor(game,earth,width,height) {
+    constructor(game, earth, width, height) {
         this.entity = game.add.image(width - 300, 200, 'sun');
         this.radius = earth.radius * 3;
         this.angle = 0;
         this.light = game.lights.addLight(this.entity.x, this.entity.y,
             earth.radius * 2.75, 0xffff00, 5);
-        this.entity.scaleX = 0.5;
-        this.entity.scaleY = 0.5;
+        this.entity.scaleX = 0.35;
+        this.entity.scaleY = 0.35;
         this.ANGLE_STEP = Math.PI / 512;
     }
 

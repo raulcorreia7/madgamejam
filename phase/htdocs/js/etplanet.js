@@ -6,7 +6,7 @@ class EtPlanet {
         this.entity = game.add.image(width, 0, 'etplanet');
         this.entity.setPipeline('Light2D');
         this.rotation_step = Phaser.Math.FloatBetween(0.05, 0.35);
-        var rnd = Phaser.Math.FloatBetween(0.15, 0.5);
+        var rnd = Phaser.Math.FloatBetween(0.15, 0.2);
         this.entity.scaleX = rnd;
         this.entity.scaleY = rnd;
     }
@@ -18,6 +18,14 @@ class EtPlanet {
     setPos(x, y) {
         this.entity.x = x;
         this.entity.y = y;
+
+        if (this.entity.y < 0) {
+            this.entity.y + this.entity.height;
+        } else
+        if (this.entity.y > this.SCREEN_HEIGHT) {
+            this.entity.y - this.entity.height;
+        }
+
     }
 
     width() {
