@@ -41,7 +41,7 @@ var etplanet;
 var player;
 var cursors;
 var rate = 0;
-var ray_cooldown = 100;
+var ray_cooldown = 20;
 
 /*
     Rays
@@ -115,11 +115,14 @@ function update() {
         rate = 0;
     } 
     if(rate == 0){
-        var ray = this.physics.add.sprite(sun.x(), sun.y(), 'ray');
+        var raiox = (sun.entity.width * sun.entity.scaleX) / 2;
+        var raioy = (sun.entity.height * sun.entity.scaleY) / 2;
+        var x = sun.x() - raiox + raiox* Math.random();
+        var y = sun.y() - raioy + raioy* Math.random();
+        var ray = this.physics.add.sprite(x,y, 'ray');
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
         sun_rays.add(ray);
-        ray.setDepth(1);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
         rate++;
@@ -127,7 +130,7 @@ function update() {
         rate++;
     }
     sun_rays.children.iterate((child) => {
-        this.physics.collide(child, game.earth, this.collisionCallback, null, this);
+        // this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
         if(RectCircleColliding(earth, child)){
             child.disableBody(true,true);
@@ -141,8 +144,6 @@ function update() {
             child.disableBody(true,true);
         }
     })
-    // updatePlayer();
-    // updateSun();
 }
 
 function RectCircleColliding(circle,rect){
