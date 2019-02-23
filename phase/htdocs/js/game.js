@@ -65,7 +65,8 @@ var clouds = [];
 
 var cloud_properties = {
     STEP: Math.PI / 2,
-    MINI_STEP: Math.PI / 16
+    MINI_STEP: Math.PI / 14,
+    ROTATION_STEP: Math.PI / 128
 }
 
 var rotation;
@@ -74,6 +75,7 @@ function preload() {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
     this.load.image('sun', 'assets/sun.png');
+
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -84,7 +86,7 @@ function preload() {
 
 function create() {
     createPlayerAnimations(this);
-    createSky(this);
+    sky = new Sky(this, WIDTH, HEIGHT);
     createEarth(this);
     createSun(this);
     createLight(this);
@@ -159,11 +161,6 @@ function updatePlayer() {
 
 }
 
-function createSky(game) {
-    sky = game.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
-    sky.setDisplaySize(WIDTH, HEIGHT);
-}
-
 function createEarth(game) {
     earth = game.add.sprite(config.width / 2, config.height / 2, 'earth');
     earth.scaleX = 0.25;
@@ -204,15 +201,17 @@ function createSun(game) {
 
 
 function createClouds(game) {
-    var cloud_radius = raio * 1.75;
+    var cloud_radius = raio * 1.9;
+    var rotacao = -90;
     for (var i = 0; i < 2 * Math.PI; i += cloud_properties.STEP) {
         for (var n = 0; n < 3; n++) {
-            clouds.push(
-                game.add.image(earth.x + cloud_radius * Math.cos(i + n * cloud_properties.MINI_STEP),
-                    earth.y + cloud_radius * Math.sin(i + n * cloud_properties.MINI_STEP),
-                    'cloud')
-            )
+            var cloud = game.add.image(earth.x + cloud_radius * Math.cos(i + n * cloud_properties.MINI_STEP),
+                earth.y + cloud_radius * Math.sin(i + n * cloud_properties.MINI_STEP),
+                'cloud');
+            cloud.angle -= rotacao;
+            clouds.push(cloud);
         }
+        rotacao -= 90;
     }
 
 }
