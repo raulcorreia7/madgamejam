@@ -80,6 +80,10 @@ var TIME = Date.now();
 var nyanCat;
 
 function preload() {
+    this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
+        frameWidth: 500,
+        frameHeight: 198
+    });
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/planet.png', 'assets/earth_n.png']);
     this.load.image('city', 'assets/city.png');
@@ -96,23 +100,21 @@ function preload() {
     this.load.image('cloud', 'assets/cloud.png');
     this.load.image('star', 'assets/star.png');
     this.load.spritesheet('etplanet',
-        ['assets/moonsprite.png', 'assets/moonsprite_n.png'], {
+        'assets/moonsprite.png', {
             frameWidth: 435,
             frameHeight: 435
         });
     this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
-    this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
-        frameWidth: 500,
-        frameHeight: 198
-    });
 }
 
 function create() {
-    nyanCat = new NyanCat(this, WIDTH, HEIGHT);
+    
+    
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
 
     sky = new Sky(this, WIDTH, HEIGHT);
+    nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.525;
     city.scaleY = 0.525;
@@ -178,7 +180,9 @@ function createPlanets(game) {
 
 function update() {
 
+
     var deltaTime = Date.now() - TIME;
+    nyanCat.update(deltaTime);
     if (game.sound.context.state === 'suspended') {
         game.sound.context.resume();
     }
@@ -245,7 +249,6 @@ function update() {
         }
 
     });
-    nyanCat.update(deltaTime);
     TIME = Date.now();
 }
 
