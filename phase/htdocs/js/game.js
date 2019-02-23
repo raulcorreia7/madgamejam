@@ -65,7 +65,6 @@ var etPlanets = [];
     Particle emitter
 */
 
-
 var cloud_properties = {
     STEP: Math.PI / 2,
     MINI_STEP: Math.PI / 14,
@@ -74,15 +73,24 @@ var cloud_properties = {
 
 var TIME = Date.now();
 
+/*
+    NyanCat
+*/
+
+var nyanCat;
 
 function preload() {
+    this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
+        frameWidth: 500,
+        frameHeight: 198
+    });
     this.load.image('sky', 'assets/sky.png');
     this.load.image('earth', ['assets/planet.png', 'assets/earth_n.png']);
     this.load.image('city', 'assets/city.png');
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
-    this.load.image('ray', 'assets/star.png');
+    this.load.image('ray', 'assets/light.png');
     this.load.image('rock', 'assets/rock.png');
     this.load.spritesheet('player',
         'assets/player.png', {
@@ -96,9 +104,9 @@ function preload() {
         });
     this.load.image('hand', 'assets/hand.png')
     this.load.image('cloud', 'assets/cloud.png');
-    this.load.image('star', 'assets/star.png');
+    this.load.image('star', 'assets/light.png');
     this.load.spritesheet('etplanet',
-        ['assets/moonsprite.png', 'assets/moonsprite_n.png'], {
+        'assets/moonsprite.png', {
             frameWidth: 435,
             frameHeight: 435
         });
@@ -106,10 +114,13 @@ function preload() {
 }
 
 function create() {
+    
+    
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
 
     sky = new Sky(this, WIDTH, HEIGHT);
+    nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.525;
     city.scaleY = 0.525;
@@ -157,7 +168,7 @@ function createPlanets(game) {
     var planets = 0;
     var step = 2 * Math.PI / MAX_PLANETS;
     var start = step * Math.random();
-    console.log(MAX_PLANETS);
+    //console.log(MAX_PLANETS);
     for (var i = 0; i < MAX_PLANETS; i++) {
 
         var et = new EtPlanet(game, earth.x + Math.cos(start), earth.y - earth.radius + Math.sin(start), MAX_PLANETS);
@@ -168,13 +179,22 @@ function createPlanets(game) {
         etPlanets.push(et);
 
         start += step;
+
+        // var MAX_PARTICLES = Phaser.Math.Between(10, 15);
+        // var step = 2 * Math.PI / MAX_PARTICLES;
+        // var start = step * Math.random();
+        // for (var i = 0; i < MAX_PARTICLES; i++) {
+        // }
         let particle = new Particle(game, et);
         et.addAsteroid(particle);
     }
 }
+
 function update() {
 
+
     var deltaTime = Date.now() - TIME;
+    nyanCat.update(deltaTime);
     if (game.sound.context.state === 'suspended') {
         game.sound.context.resume();
     }
@@ -241,7 +261,6 @@ function update() {
         }
 
     });
-
     TIME = Date.now();
 }
 
