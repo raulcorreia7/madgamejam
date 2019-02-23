@@ -26,14 +26,10 @@ var config = {
 var game = new Phaser.Game(config);
 
 
+//Gameobjects
+
 //The sun
 var sun;
-
-var sun_properties = {
-    radius: 0,
-    angle: 0,
-    light: 0
-}
 //Earth
 var earth;
 //Sky
@@ -41,11 +37,6 @@ var sky;
 
 // Player
 var player;
-var player_properties = {
-    radius: 0,
-    angle: 0,
-    rotation_step: Math.PI / 256
-};
 var cursors;
 var raio;
 var rotation = 0.3;
