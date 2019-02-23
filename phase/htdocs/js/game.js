@@ -43,7 +43,8 @@ var sky;
 var player;
 var player_properties = {
     radius: 0,
-    angle: 0
+    angle: 0,
+    rotation_step: Math.PI / 256
 };
 var cursors;
 var raio;
@@ -64,6 +65,7 @@ function preload() {
 }
 
 function create() {
+    createPlayerAnimations(this);
     createSky(this);
     createEarth(this);
     createSun(this);
@@ -73,24 +75,39 @@ function create() {
 }
 
 function update() {
-    if (cursors.left.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation -= Math.PI / 512;
-        player_properties.angle -= Math.PI / 512;
-
-
-        // player.anims.play('left', true);
-    } else if (cursors.right.isDown) {
-        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
-        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
-        player.rotation += Math.PI / 512;
-        player_properties.angle += Math.PI / 512;
-    } else {
-        // player.setVelocityX(0);
-        // player.anims.play('turn');
-    }
+    updatePlayer();
     updateSun();
+}
+
+function createPlayerAnimations(game) {
+    game.anims.create({
+        key: 'left',
+        frames: game.anims.generateFrameNumbers('player', {
+            start: 0,
+            end: 3
+        }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    game.anims.create({
+        key: 'turn',
+        frames: [{
+            key: 'player',
+            frame: 4
+        }],
+        frameRate: 20
+    });
+
+    game.anims.create({
+        key: 'right',
+        frames: game.anims.generateFrameNumbers('player', {
+            start: 5,
+            end: 8
+        }),
+        frameRate: 10,
+        repeat: -1
+    });
 }
 
 function updateSun() {
@@ -99,6 +116,28 @@ function updateSun() {
     sun_properties.angle += Math.PI / 512;
     sun_properties.light.x = sun.x;
     sun_properties.light.y = sun.y;
+}
+
+function updatePlayer() {
+    if (cursors.left.isDown) {
+        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
+        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
+        player.rotation -= player_properties.rotation_step;
+        player_properties.angle -= player_properties.rotation_step;
+
+
+        player.anims.play('left', true);
+    } else if (cursors.right.isDown) {
+        player.x = earth.x + Math.cos(player_properties.angle) * player_properties.radius;
+        player.y = earth.y + Math.sin(player_properties.angle) * player_properties.radius;
+        player.rotation += player_properties.rotation_step;
+        player_properties.angle += player_properties.rotation_step;
+        player.anims.play('right', true);
+    } else {
+        // player.setVelocityX(0);
+        player.anims.play('turn');
+    }
+
 }
 
 function createSky(game) {
@@ -139,6 +178,5 @@ function createSun(game) {
     this.sun_properties.radius = raio * 2;
     this.sun_properties.angle = 0;
     this.sun_properties.light = game.lights.addLight(sun.x, sun.y,
-        raio * 2, 0x00ff00,5);
-
+        raio * 1.5, 0xffff00, 5);
 }
