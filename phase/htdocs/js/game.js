@@ -70,7 +70,8 @@ var cloud_properties = {
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
-    this.load.image('earth', ['assets/earth.png', 'assets/earth_n.png']);
+    this.load.image('earth', ['assets/planet.png', 'assets/earth_n.png']);
+    this.load.image('city', 'assets/city.png');
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.image('ray', 'assets/star.png');
@@ -89,7 +90,12 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
     createLight(this);
     sky = new Sky(this, WIDTH, HEIGHT);
+    city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
+    city.scaleX = 0.195;
+    city.scaleY = 0.195;
+    city.x -= 3.5;
     earth = new Earth(this, WIDTH, HEIGHT);
+    
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
     createPlanets(this);
