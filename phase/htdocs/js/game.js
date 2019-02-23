@@ -55,6 +55,10 @@ var light_speed = 200;
 
 var clouds = [];
 
+/*
+    Et Planets
+*/
+var etPlanets_physics;
 var etPlanets = [];
 
 var cloud_properties = {
@@ -76,30 +80,46 @@ function preload() {
             frameHeight: 48
         });
     this.load.image('cloud', 'assets/cloud.png');
-    this.load.image('star', 'assets/sky.png');
+    this.load.image('star', 'assets/star.png');
     this.load.image('etplanet', ['assets/orbit.png', 'assets/orbit_n.png']);
 }
 
 function create() {
+    etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
     createLight(this);
     sky = new Sky(this, WIDTH, HEIGHT);
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
-    //etplanet = new EtPlanet(this, WIDTH, HEIGHT);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[0].setPos(0,0);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[1].setPos(0,HEIGHT);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[2].setPos(WIDTH,HEIGHT);
+    createPlanets(this);
+
     sun_rays = this.add.group();
 
     let music = this.sound.add('music');
     music.play();
     music.loop = true;
     // createClouds(this);
+}
+
+function createPlanets(game) {
+    var MAX_PLANETS = Phaser.Math.Between(4, 8);
+    var radius = earth.radius * 6;
+
+    var planets = 0;
+    var step = 2 * Math.PI / MAX_PLANETS;
+    var start = step * Math.random();
+    for (var i = 0; i < MAX_PLANETS; i++) {
+        var et = new EtPlanet(game, WIDTH, HEIGHT);
+        etPlanets_physics.add(et.entity);
+        etPlanets.push(et);
+        et.setPos(earth.x() + radius * Phaser.Math.FloatBetween(1, 1.05) * Math.cos(start), earth.y() + radius * Phaser.Math.FloatBetween(1, 1.3) * Math.sin(start));
+        start += step;
+
+    }
+
+
+
 }
 
 function update() {
@@ -122,6 +142,8 @@ function update() {
         var ray = this.physics.add.sprite(x,y, 'ray');
 
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
+        this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
+        this.physics.add.overlap(ray, etPlanets_physics, hitPlanet, null, this);
         sun_rays.add(ray);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
@@ -132,33 +154,53 @@ function update() {
     sun_rays.children.iterate((child) => {
         // this.physics.collide(child, game.earth, this.collisionCallback, null, this);
 
-        if(RectCircleColliding(earth, child)){
-            child.disableBody(true,true);
+        if (RectCircleColliding(earth, child)) {
+            child.disableBody(true, true);
         }
 
-        if(child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2){
-            this.physics.moveTo(child,this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
+
+        etPlanets.forEach((planet) => {
+            if (RectCircleColliding(planet, child)) {
+                child.disableBody(true,true);
+            }
+
+        })
+
+        if (child.x > player.x() - player.width() / 2 && child.x < player.x() + player.width() / 2 && child.y > player.y() - player.height() / 2 && child.y < player.y() + player.height() / 2) {
+            this.physics.moveTo(child, this.input.mousePointer.x, this.input.mousePointer.y, light_speed);
         }
 
-        if(child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT){
-            child.disableBody(true,true);
+        if (child.x <= 0 || child.x >= WIDTH || child.y <= 0 || child.y >= HEIGHT) {
+            child.disableBody(true, true);
         }
     })
 }
 
-function RectCircleColliding(circle,rect){
-    var distX = Math.abs(circle.x() - rect.x-rect.width/2);
-    var distY = Math.abs(circle.y() - rect.y-rect.height/2);
+function updateRays() {
 
-    if (distX > (rect.width/2 + circle.radius)) { return false; }
-    if (distY > (rect.height/2 + circle.radius)) { return false; }
+}
 
-    if (distX <= (rect.weight/2)) { return true; } 
-    if (distY <= (rect.height/2)) { return true; }
+function RectCircleColliding(circle, rect) {
+    var distX = Math.abs(circle.x() - rect.x - rect.width / 2);
+    var distY = Math.abs(circle.y() - rect.y - rect.height / 2);
 
-    var dx=distX-rect.width/2;
-    var dy=distY-rect.height/2;
-    return (dx*dx+dy*dy<=(circle.radius*circle.radius));
+    if (distX > (rect.width / 2 + circle.radius)) {
+        return false;
+    }
+    if (distY > (rect.height / 2 + circle.radius)) {
+        return false;
+    }
+
+    if (distX <= (rect.weight / 2)) {
+        return true;
+    }
+    if (distY <= (rect.height / 2)) {
+        return true;
+    }
+
+    var dx = distX - rect.width / 2;
+    var dy = distY - rect.height / 2;
+    return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
 
 function createLight(game) {
@@ -178,5 +220,10 @@ function createClouds(game) {
         }
         rotacao -= 90;
     }
+
+}
+
+function hitPlanet(ray, etplanet) {
+    ray.disableBody(true, true);
 
 }
