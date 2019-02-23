@@ -63,14 +63,9 @@ function preload() {
 }
 
 function create() {
-    sky = this.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
-    sky.setDisplaySize(WIDTH, HEIGHT);
-
+    createSky();
     createEarth();
     createPlayer();
-
-
-
     cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -99,6 +94,11 @@ function updateSun() {
     sun.x = earth.x + Math.cos(sun_properties.angle) * sun_properties.radius;
     sun.y = earth.y + Math.sin(sun_properties.angle) * sun_properties.radius;
     sun_properties.angle += Math.PI / 512;
+}
+
+function createSky() {
+    sky = this.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
+    sky.setDisplaySize(WIDTH, HEIGHT);
 }
 
 function createEarth() {
