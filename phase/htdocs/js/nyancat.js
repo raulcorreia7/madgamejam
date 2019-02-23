@@ -12,7 +12,7 @@ class NyanCat {
         this.SCREEN_WIDTH = width;
         this.SCREEN_HEIGHT = height;
         this.COOLDOWN = 1 * 1000;
-        this.DEFAULT_COOLDOWN = 7 * 1000;
+        this.DEFAULT_COOLDOWN = 14 * 1000;
         this.GO_NYAN_BE_FREE = true;
     }
 
