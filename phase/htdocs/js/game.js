@@ -51,6 +51,9 @@ var raio;
 var rotation = 0.3;
 var angle = Math.PI / 2;
 
+/*
+    Rays
+*/
 var sun_rays;
 
 var rotation;
