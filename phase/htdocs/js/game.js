@@ -89,6 +89,7 @@ function create() {
 
     let music = this.sound.add('music');
     music.play();
+    music.loop = true;
     // createClouds(this);
 }
 
