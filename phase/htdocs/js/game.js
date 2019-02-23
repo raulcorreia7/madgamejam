@@ -31,7 +31,8 @@ var sun;
 
 var sun_properties = {
     radius: 0,
-    angle: 0
+    angle: 0,
+    light: 0
 }
 //Earth
 var earth;
@@ -63,9 +64,11 @@ function preload() {
 }
 
 function create() {
-    createSky();
-    createEarth();
-    createPlayer();
+    createSky(this);
+    createEarth(this);
+    createSun(this);
+    createLight(this);
+    createPlayer(this);
     cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -94,23 +97,32 @@ function updateSun() {
     sun.x = earth.x + Math.cos(sun_properties.angle) * sun_properties.radius;
     sun.y = earth.y + Math.sin(sun_properties.angle) * sun_properties.radius;
     sun_properties.angle += Math.PI / 512;
+    sun_properties.light.x = sun.x;
+    sun_properties.light.y = sun.y;
 }
 
-function createSky() {
-    sky = this.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
+function createSky(game) {
+    sky = game.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
     sky.setDisplaySize(WIDTH, HEIGHT);
 }
 
-function createEarth() {
-    earth = this.add.sprite(config.width / 2, config.height / 2, 'earth');
+function createEarth(game) {
+    earth = game.add.sprite(config.width / 2, config.height / 2, 'earth');
     earth.scaleX = 0.4;
     earth.scaleY = 0.4;
     raio = ((earth.height * earth.scaleY) / 2);
+    earth.setPipeline('Light2D');
+
 
 }
 
-function createPlayer() {
-    player = this.add.sprite(earth.x, earth.y - raio, 'player');
+function createLight(game) {
+    game.lights.enable().setAmbientColor(0xADD8E6);
+}
+
+function createPlayer(game) {
+    player = game.physics.add.sprite(earth.x, earth.y - raio, 'player');
+
 
     player.y -= player.height / 2;
     player_properties.radius = raio + player.height / 2;
@@ -122,9 +134,11 @@ function createPlayer() {
     player.setCollideWorldBounds(true);
 }
 
-function createSun() {
-    sun = this.add.image(config.width - 300, 200, 'sun');
-    sun_properties.radius = raio * 2;
-    sun_properties.angle = 0;
+function createSun(game) {
+    sun = game.add.image(config.width - 300, 200, 'sun');
+    this.sun_properties.radius = raio * 2;
+    this.sun_properties.angle = 0;
+    this.sun_properties.light = game.lights.addLight(sun.x, sun.y,
+        raio * 2, 0x00ff00,5);
 
 }
