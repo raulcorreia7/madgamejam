@@ -25,6 +25,10 @@ class EtPlanet {
     }
 
     update(deltatime) {
+        this.asteroids.forEach(element => {
+            element.update(this);
+        });
+
         this.ElapsedTime += deltatime;
         this.updateFrames();
         this.tick(deltatime);
@@ -32,7 +36,7 @@ class EtPlanet {
     }
 
     addAsteroid(particle){
-        this.asteroids.add(particle);
+        this.asteroids.push(particle);
     }
 
     setPos(x, y) {
@@ -93,6 +97,8 @@ class EtPlanet {
         }
     }
     updateFrames() {
+        
+
         var percent = this.health / this.MAX_HEALTH;
         if (percent < 0.1) {
             // this.color = 0x000000;

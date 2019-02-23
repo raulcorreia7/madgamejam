@@ -170,7 +170,7 @@ function createParticles(planet, game) {
         particle.entity.x = planet.x() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.cos(start);
         particle.entity.y = planet.y() + radius * Phaser.Math.FloatBetween(0.3, 0.35) * Math.sin(start);
         start += step;
-        particle.update(planet);
+        planet.addAsteroid(particle);
     }
 }
 
