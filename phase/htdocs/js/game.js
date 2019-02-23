@@ -41,7 +41,7 @@ var rotation;
 
 function preload() {
     this.load.image('sky', 'assets/sky.png');
-    this.load.image('earth', 'assets/earth.png');
+    this.load.image('earth', ['assets/earth.png','assets/earth_n.png']);
     this.load.spritesheet('player',
         'assets/dude.png', {
             frameWidth: 32,
@@ -50,8 +50,8 @@ function preload() {
 }
 
 function create() {
-    sky = this.add.image(WIDTH/2, HEIGHT/2, 'sky');
-    sky.setDisplaySize(WIDTH,HEIGHT);
+    sky = this.add.image(WIDTH / 2, HEIGHT / 2, 'sky');
+    sky.setDisplaySize(WIDTH, HEIGHT);
 
     earth = this.add.sprite(config.width / 2, config.height / 2, 'earth');
     earth.scaleX = 0.4;
@@ -61,7 +61,7 @@ function create() {
 
     player.y -= player.height / 2;
 
-    
+
     //player.setCollideWorldBounds(true);
     cursors = this.input.keyboard.createCursorKeys();
 }
