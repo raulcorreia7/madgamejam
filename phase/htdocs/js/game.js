@@ -91,19 +91,25 @@ function create() {
     earth = new Earth(this, WIDTH, HEIGHT);
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
-    //etplanet = new EtPlanet(this, WIDTH, HEIGHT);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[0].setPos(0,0);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[1].setPos(0,HEIGHT);
-    etPlanets.push(new EtPlanet(this, WIDTH, HEIGHT));
-    etPlanets[2].setPos(WIDTH,HEIGHT);
+    createPlanets(this);
+
     sun_rays = this.add.group();
 
     let music = this.sound.add('music');
     music.play();
     music.loop = true;
     // createClouds(this);
+}
+
+function createPlanets(game) {
+    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
+    var et = etPlanets[0];
+    et.setPos(et.halfWidth(), et.halfHeight());
+    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
+    etPlanets[1].setPos(0, HEIGHT);
+    etPlanets.push(new EtPlanet(game, WIDTH, HEIGHT));
+    etPlanets[2].setPos(WIDTH, HEIGHT);
+
 }
 
 function update() {
