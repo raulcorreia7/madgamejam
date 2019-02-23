@@ -160,11 +160,10 @@ function createPlanets(game) {
 
         etPlanets_physics.add(et.entity);
         etPlanets.push(et);
-        
+
         start += step;
     }
 }
-
 function update() {
 
     var deltaTime = Date.now() - TIME;
