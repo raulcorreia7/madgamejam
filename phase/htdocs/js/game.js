@@ -88,7 +88,7 @@ function create() {
     sun = new Sun(this, earth, WIDTH, HEIGHT);
     player = new Player(this, earth);
     createPlanets(this);
-
+    enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
 
     let music = this.sound.add('music');
