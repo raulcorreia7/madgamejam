@@ -51,6 +51,8 @@ var raio;
 var rotation = 0.3;
 var angle = Math.PI / 2;
 
+var sun_rays;
+
 var rotation;
 
 function preload() {
@@ -147,8 +149,8 @@ function createSky(game) {
 
 function createEarth(game) {
     earth = game.add.sprite(config.width / 2, config.height / 2, 'earth');
-    earth.scaleX = 0.4;
-    earth.scaleY = 0.4;
+    earth.scaleX = 0.25;
+    earth.scaleY = 0.25;
     raio = ((earth.height * earth.scaleY) / 2);
     earth.setPipeline('Light2D');
 
@@ -175,8 +177,10 @@ function createPlayer(game) {
 
 function createSun(game) {
     sun = game.add.image(config.width - 300, 200, 'sun');
-    this.sun_properties.radius = raio * 2;
+    this.sun_properties.radius = raio * 3;
     this.sun_properties.angle = 0;
     this.sun_properties.light = game.lights.addLight(sun.x, sun.y,
-        raio * 1.5, 0xffff00, 5);
+        raio * 2.75, 0xffff00, 5);
+    sun.scaleX = 0.5;
+    sun.scaleY = 0.5;
 }
