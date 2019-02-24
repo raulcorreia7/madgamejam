@@ -123,7 +123,9 @@ class Player {
                 this.health--;
             }
         }
+    }
 
-
+    setIdle(){
+        this.entity.anims.play('turn', true);
     }
 }
