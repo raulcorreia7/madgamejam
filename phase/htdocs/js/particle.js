@@ -11,7 +11,7 @@ class Particle {
     }
 
     update(planet) {
-         this.entity.x = planet.x() + Math.cos(this.angle) * this.radius;
+         this.entity.x = planet.x() + Math.cos(this.angle) * this.radius * Math.sin(this.angle);
          this.entity.y = planet.y() + Math.sin(this.angle) * this.radius;
          this.angle += this.ANGLE_STEP;
     }
