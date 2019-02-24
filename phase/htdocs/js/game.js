@@ -90,6 +90,12 @@ var timerCountdown = 60;
 
 var TIMER_DEFAULT = 60;
 
+var gameOverSound;
+
+var playedGameOver = false;
+
+var music;
+
 function preload() {
     this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
         frameWidth: 500,
@@ -102,6 +108,7 @@ function preload() {
     this.load.audio('music', 'assets/Sound/music.mp3');
     this.load.audio('break_heart', 'assets/Sound/break_heart.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
+    this.load.audio('game_over', 'assets/Sound/game_over.mp3');
     this.load.spritesheet('ray', 'assets/light.png', {
         frameWidth: 24,
         frameHeight: 24
@@ -164,7 +171,8 @@ function create() {
     enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
     healthBar = new Healthbar(this, player, WIDTH, HEIGHT);
-    let music = this.sound.add('music');
+    music = this.sound.add('music');
+    gameOverSound = this.sound.add('game_over');
     music.play();
     music.loop = true;
     // createClouds(this);
@@ -176,6 +184,7 @@ function create() {
     this.physics.add.overlap(player.entity, enemy.entity, EnemyHitPlayer, null, this);
 
     TimerFunction();
+
 }
 
 function TimerFunction() {
@@ -255,6 +264,13 @@ function update() {
     var deltaTime = Date.now() - TIME;
     nyanCat.update(deltaTime);
     if (player.lives() == 0) {
+        if (!playedGameOver) {
+            setTimeout(() => {
+                gameOverSound.play();
+            }, 1.5 * 1000);
+            playedGameOver = true;
+            music.stop();
+        }
         healthBar.update(player);
         player.setIdle();
         enemy.setIdle();
