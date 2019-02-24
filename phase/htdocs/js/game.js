@@ -202,6 +202,9 @@ function update() {
 
     if (player.lives() == 0) {
         this.scene.pause();
+        setTimeout(() => {
+            location.reload();
+        }, 6 * 1000);
     }
 
 
