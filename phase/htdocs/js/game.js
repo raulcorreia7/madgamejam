@@ -106,7 +106,7 @@ function preload() {
     this.load.spritesheet('enemy',
         'assets/enemy.png', {
             frameWidth: 199,
-            frameHeight: 200
+            frameHeight: 200,
         });
     this.load.image('hand', 'assets/hand.png')
     this.load.image('cloud', 'assets/cloud.png');
@@ -218,7 +218,6 @@ function update() {
         }, 6 * 1000);
     }
 
-
     var deltaTime = Date.now() - TIME;
     nyanCat.update(deltaTime);
     if (game.sound.context.state === 'suspended') {
@@ -254,6 +253,11 @@ function update() {
         this.physics.moveTo(ray, earth.x(), earth.y(), light_speed);
         this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
         this.physics.add.overlap(ray, etPlanets_physics, hitPlanet, null, this);
+
+        this.physics.add.collider(ray, enemy.entity, hitEnemy, null, this);
+        this.physics.add.overlap(ray, enemy.entity, hitEnemy, null, this);
+
+
         sun_rays.add(ray);
         earth.entity.setDepth(2);
         player.entity.setDepth(3);
@@ -265,8 +269,6 @@ function update() {
     }
     sun_rays.children.iterate((child) => {
         child.update();
-
-
 
         child.particle_emitter.setPosition(child.x, child.y);
         child.particle_emitter.explode();
@@ -351,7 +353,14 @@ function createClouds(game) {
 
 function hitPlanet(ray, etplanet) {
     ray.disableBody(true, true);
+    ray.particle_emitter.killAll();
 
+}
+
+function hitEnemy(ray, enemy) {
+    ray.disableBody(true, true);
+    enemy.disableBody(true, true);
+    ray.particle_emitter.killAll();
 }
 
 function EnemyHitPlayer(playerEntity, enemyEntity) {
