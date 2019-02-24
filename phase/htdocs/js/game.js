@@ -260,7 +260,6 @@ function createPlanets(game) {
 }
 
 function update() {
-
     var deltaTime = Date.now() - TIME;
     nyanCat.update(deltaTime);
     if (player.lives() == 0) {
@@ -270,14 +269,14 @@ function update() {
             }, 1.5 * 1000);
             playedGameOver = true;
             music.stop();
+            setTimeout(() => {
+                location.reload();
+            }, 6 * 1000);
         }
         healthBar.update(player);
         player.setIdle();
         enemy.setIdle();
         //this.scene.pause();
-        setTimeout(() => {
-            location.reload();
-        }, 6 * 1000);
         return;
     };
     if (game.sound.context.state === 'suspended') {
