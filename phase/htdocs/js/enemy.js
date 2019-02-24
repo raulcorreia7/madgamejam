@@ -48,6 +48,14 @@ class Enemy {
         this.rotation_step = Math.PI / 256;
     }
 
+    changeDirection() {
+        if (this.direction < 0.5) {
+            this.direction = 1;
+        } else {
+            this.direction = 0;
+        }
+    }
+
     x() {
         return this.entity.x;
     }
@@ -62,6 +70,8 @@ class Enemy {
     height() {
         return this.entity.height;
     }
+
+
 
     update(earth, player) {
         if (this.RectCircleColliding(this, player.entity)) {

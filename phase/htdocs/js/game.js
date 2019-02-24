@@ -270,8 +270,8 @@ function update() {
         this.physics.add.collider(ray, etPlanets_physics, hitPlanet, null, this);
         this.physics.add.overlap(ray, etPlanets_physics, hitPlanet, null, this);
 
-        this.physics.add.collider(ray, enemy.entity, hitEnemy, null, this);
-        this.physics.add.overlap(ray, enemy.entity, hitEnemy, null, this);
+        this.physics.add.collider(ray, enemy.entity, hitEnemy, proceedHit, this);
+        this.physics.add.overlap(ray, enemy.entity, hitEnemy, proceedHit, this);
 
 
         sun_rays.add(ray);
@@ -376,8 +376,12 @@ function hitPlanet(ray, etplanet) {
 
 function hitEnemy(ray, enemy) {
     ray.disableBody(true, true);
-    enemy.disableBody(true, true);
+    enemy.changeDirection();
     ray.particle_emitter.killAll();
+}
+
+function proceedHit(enemy){
+    
 }
 
 function EnemyHitPlayer(playerEntity, enemyEntity) {
