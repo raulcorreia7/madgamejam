@@ -144,7 +144,11 @@ function create() {
     // createClouds(this);
 
     createParticleEmitter(this);
+
+    this.physics.add.collider(player.entity, enemy.entity);
+    this.physics.add.overlap(player.entity, enemy.entity, EnemyHitPlayer, null, this);
 }
+
 
 function createParticleEmitter(game) {
 
@@ -196,6 +200,10 @@ function createPlanets(game) {
 
 function update() {
 
+    if (player.lives() == 0) {
+        this.scene.pause();
+    }
+
 
     var deltaTime = Date.now() - TIME;
     nyanCat.update(deltaTime);
@@ -204,7 +212,7 @@ function update() {
     }
 
     sun.update(earth);
-    player.update(earth, cursors);
+    player.update(deltaTime, earth, cursors);
     enemy.update(earth, player);
     etPlanets.forEach(e => e.update(deltaTime));
 
@@ -330,4 +338,10 @@ function createClouds(game) {
 function hitPlanet(ray, etplanet) {
     ray.disableBody(true, true);
 
+}
+
+function EnemyHitPlayer(playerEntity, enemyEntity) {
+    console.log("HIT");
+    player.takeDamage();
+    console.log(player.lives());
 }
