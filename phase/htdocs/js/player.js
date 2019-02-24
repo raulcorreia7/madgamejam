@@ -37,6 +37,15 @@ class Player {
         this.hands.rotation = Math.PI/2;
         this.hands.y -= this.hands.height/2;
         this.entity.y -= this.entity.height / 2;
+        this.entity.height *= 0.7;
+        this.entity.width *= 0.7;
+        this.entity.scaleX = 0.7;
+        this.entity.scaleY = 0.7;
+
+        this.hands.height *= 0.7;
+        this.hands.width *= 0.7;
+        this.hands.scaleX = 0.7;
+        this.hands.scaleY = 0.7;
         this.radius = earth.radius + this.entity.height / 2;
         this.angle = 0;
 

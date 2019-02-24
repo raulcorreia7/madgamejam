@@ -105,8 +105,8 @@ function preload() {
         });
     this.load.spritesheet('enemy',
         'assets/enemy.png', {
-            frameWidth: 50,
-            frameHeight: 100
+            frameWidth: 199,
+            frameHeight: 200
         });
     this.load.image('hand', 'assets/hand.png')
     this.load.image('cloud', 'assets/cloud.png');
@@ -210,7 +210,7 @@ function update() {
 
     sun.update(earth);
     player.update(earth, cursors);
-    enemy.update(earth);
+    enemy.update(earth, player);
     etPlanets.forEach(e => e.update(deltaTime));
 
     if (rate == ray_cooldown) {
