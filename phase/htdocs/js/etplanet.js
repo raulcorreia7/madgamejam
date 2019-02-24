@@ -75,12 +75,19 @@ class EtPlanet {
         return this.entity.y;
     }
 
-    heal() {
-        if (this.health == this.MAX_HEALTH) return;
+    heal(game) {
+        if (this.health == this.MAX_HEALTH){
+            console.log(game.score);
+            game.addScore(30);
+            return;
+        } 
         if (this.health < this.MAX_HEALTH) {
+            console.log(game.score);
+            game.addScore(20);
             this.health += this.STEP;
         } else {
             if (this.health + this.STEP > this.MAX_HEALTH) {
+                game.addScore(10);
                 this.health = this.MAX_HEALTH;
                 this.powerup_sound.play();
             }

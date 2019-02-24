@@ -150,6 +150,7 @@ function create() {
     // createClouds(this);
 
     createParticleEmitter(this);
+    this.addScore = addScore;
 }
 
 function addScore(increment){
@@ -271,7 +272,7 @@ function update() {
             if (RectCircleColliding(planet, child)) {
                 child.disableBody(true, true);
                 child.particle_emitter.killAll();
-                planet.heal();
+                planet.heal(this);
                 child.x = WIDTH * 2;
                 child.y = HEIGHT * y;
             }
