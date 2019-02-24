@@ -21,6 +21,15 @@ class Enemy {
             frameRate: 10,
             repeat: -1
         });
+        game.anims.create({
+            key: 'enemyidle',
+            frames: game.anims.generateFrameNumbers('enemy', {
+                start: 0,
+                end: 0
+            }),
+            frameRate: 10,
+            repeat: -1
+        });
 
         this.entity = game.physics.add.sprite(earth.x, earth.y - earth.radius, 'enemy');
         this.entity.scaleX = 0.5;
@@ -57,6 +66,10 @@ class Enemy {
     update(earth, player) {
         if (this.RectCircleColliding(this, player.entity)) {
             //this.entity.disableBody(true, true);
+        }
+        if (player.lives() == 0) {
+            this.entity.anims.play('enemyidle', true);
+            return;
         }
 
         //Left
@@ -97,6 +110,10 @@ class Enemy {
         var dx = distX - rect.width / 2;
         var dy = distY - rect.height / 2;
         return (dx * dx + dy * dy <= (circle.radius * circle.radius));
+    }
+
+    setIdle() {
+        this.entity.anims.play('enemyidle', true);
     }
 
 }

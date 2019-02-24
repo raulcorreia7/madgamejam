@@ -108,7 +108,11 @@ class Player {
             if (this.TIME_ELAPSED >= this.DAMAGE_COOLDOWN) {
                 this.INVUNERABLE = false;
                 this.TIME_ELAPSED = 0;
+
             }
+            this.entity.setTint(0xFF0000);
+        }else{
+            this.entity.setTint(0xFFFFFF);
         }
     }
 
@@ -123,7 +127,9 @@ class Player {
                 this.health--;
             }
         }
+    }
 
-
+    setIdle() {
+        this.entity.anims.play('turn', true);
     }
 }

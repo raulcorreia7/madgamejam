@@ -227,6 +227,8 @@ function update() {
     nyanCat.update(deltaTime);
     if (player.lives() == 0) {
         healthBar.update(player);
+        player.setIdle();
+        enemy.setIdle();
         //this.scene.pause();
         setTimeout(() => {
             location.reload();

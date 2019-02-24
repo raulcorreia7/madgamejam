@@ -18,6 +18,7 @@ class Healthbar {
         var dif = player.MAX_LIVES - player.health;
         for (var i = 0; i < dif; i++) {
             this.hearts[i].setFrame(1);
+            this.hearts[i].setTint(0x800080);
         }
 
     }
