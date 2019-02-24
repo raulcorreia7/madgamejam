@@ -82,6 +82,8 @@ var TIME = Date.now();
 
 var nyanCat;
 
+var healthBar;
+
 function preload() {
     this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
         frameWidth: 500,
@@ -116,6 +118,11 @@ function preload() {
             frameWidth: 435,
             frameHeight: 435
         });
+    this.load.spritesheet('heart',
+        'assets/hearts.png', {
+            frameWidth: 40,
+            frameHeight: 80
+        });
     this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
 }
 
@@ -124,9 +131,14 @@ function create() {
     this.score = 0;
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
-    
+
     sky = new Sky(this, WIDTH, HEIGHT);
-    var style = {fontSize: '32px', fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+    var style = {
+        fontSize: '32px',
+        fill: "#fff",
+        boundsAlignH: "center",
+        boundsAlignV: "middle"
+    };
     scoreText = this.add.text(16, 16, 'score: 0', style);
     scoreText.setText('Score: ' + score);
     nyanCat = new NyanCat(this, WIDTH, HEIGHT);
@@ -143,7 +155,7 @@ function create() {
     createLight(this);
     enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
-
+    healthBar = new Healthbar(this, player, WIDTH, HEIGHT);
     let music = this.sound.add('music');
     music.play();
     music.loop = true;
@@ -156,7 +168,7 @@ function create() {
     this.physics.add.overlap(player.entity, enemy.entity, EnemyHitPlayer, null, this);
 }
 
-function addScore(increment){
+function addScore(increment) {
     this.score += increment;
     scoreText.setText('Score: ' + this.score);
 }
@@ -211,15 +223,16 @@ function createPlanets(game) {
 
 function update() {
 
+    var deltaTime = Date.now() - TIME;
+    nyanCat.update(deltaTime);
     if (player.lives() == 0) {
-        this.scene.pause();
+        healthBar.update(player);
+        //this.scene.pause();
         setTimeout(() => {
             location.reload();
         }, 6 * 1000);
-    }
-
-    var deltaTime = Date.now() - TIME;
-    nyanCat.update(deltaTime);
+        return;
+    };
     if (game.sound.context.state === 'suspended') {
         game.sound.context.resume();
     }
@@ -228,6 +241,7 @@ function update() {
     player.update(deltaTime, earth, cursors);
     enemy.update(earth, player);
     etPlanets.forEach(e => e.update(deltaTime));
+    healthBar.update(player);
 
     if (rate == ray_cooldown) {
         rate = 0;
@@ -301,6 +315,7 @@ function update() {
         }
 
     });
+
     TIME = Date.now();
 }
 
