@@ -14,6 +14,9 @@ class NyanCat {
         this.COOLDOWN = 1 * 1000;
         this.DEFAULT_COOLDOWN = 14 * 1000;
         this.GO_NYAN_BE_FREE = true;
+
+        this.VAR_SIN = 0;
+        this.VAR_SIN_STEP = Math.PI/16;
     }
 
 
@@ -30,6 +33,8 @@ class NyanCat {
                 this.ElapsedTime = 0;
             }
             this.entity.x += 10;
+            this.entity.y += Math.sin(this.VAR_SIN);
+            this.VAR_SIN += this.VAR_SIN_STEP;
             if (this.entity.x > this.SCREEN_WIDTH + 200) {
                 this.entity.x = -1000;
                 this.entity.y = Phaser.Math.FloatBetween(this.SCREEN_HEIGHT * 0.1, this.SCREEN_HEIGHT * 0.9);
