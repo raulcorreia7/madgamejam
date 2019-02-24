@@ -84,6 +84,12 @@ var nyanCat;
 
 var healthBar;
 
+var timerText;
+
+var timerCountdown = 60;
+
+var TIMER_DEFAULT = 60;
+
 function preload() {
     this.load.spritesheet('nyancat', 'assets/nyancat_spritesheet.png', {
         frameWidth: 500,
@@ -94,6 +100,7 @@ function preload() {
     this.load.image('city', 'assets/city.png');
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
+    this.load.audio('break_heart', 'assets/Sound/break_heart.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
     this.load.spritesheet('ray', 'assets/light.png', {
         frameWidth: 24,
@@ -139,6 +146,7 @@ function create() {
         boundsAlignH: "center",
         boundsAlignV: "middle"
     };
+    timerText = this.add.text(WIDTH * 0.95, HEIGHT * 0.016, '60', style);
     scoreText = this.add.text(16, 16, 'score: 0', style);
     scoreText.setText('Score: ' + score);
     nyanCat = new NyanCat(this, WIDTH, HEIGHT);
@@ -166,6 +174,27 @@ function create() {
 
     this.physics.add.collider(player.entity, enemy.entity);
     this.physics.add.overlap(player.entity, enemy.entity, EnemyHitPlayer, null, this);
+
+    TimerFunction();
+}
+
+function TimerFunction() {
+    setTimeout(
+        () => {
+            // console.log(timerCountdown);
+            timerCountdown--;
+            timerText.setText('' + timerCountdown);
+            if (timerCountdown <= TIMER_DEFAULT / 3) {
+                timerText.setTint(0xff0000);
+            };
+            if (timerCountdown > 0) {
+                TimerFunction();
+            } else {
+                player.dead();
+            }
+        },
+        1 * 1000
+    );
 }
 
 function addScore(increment) {
@@ -374,18 +403,18 @@ function hitPlanet(ray, etplanet) {
 
 }
 
-function hitEnemy(ray, enemy) {
+function hitEnemy(ray, enemyentity) {
     ray.disableBody(true, true);
     enemy.changeDirection();
     ray.particle_emitter.killAll();
 }
 
-function proceedHit(enemy){
-    
+function proceedHit(enemy) {
+
 }
 
 function EnemyHitPlayer(playerEntity, enemyEntity) {
-    console.log("HIT");
+    //console.log("HIT");
     player.takeDamage();
-    console.log(player.lives());
+    //console.log(player.lives());
 }

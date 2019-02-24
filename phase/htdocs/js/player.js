@@ -62,6 +62,7 @@ class Player {
         this.INVUNERABLE = false;
         this.MAX_LIVES = 3;
         this.health = this.MAX_LIVES;
+        this.break_glass_sound = game.sound.add('break_heart');
     }
 
     x() {
@@ -111,7 +112,7 @@ class Player {
 
             }
             this.entity.setTint(0xFF0000);
-        }else{
+        } else {
             this.entity.setTint(0xFFFFFF);
         }
     }
@@ -120,11 +121,17 @@ class Player {
         return this.health;
     }
 
+    dead() {
+        this.health = 0;
+    }
+
     takeDamage() {
         if (!this.INVUNERABLE) {
             this.INVUNERABLE = true;
             if (this.health > 0) {
                 this.health--;
+                this.break_glass_sound.play();
+                
             }
         }
     }
