@@ -28,6 +28,9 @@ var game = new Phaser.Game(config);
 
 //Gameobjects
 
+var score = 0;
+var scoreText;
+
 //The sun
 var sun;
 //Earth
@@ -118,11 +121,14 @@ function preload() {
 
 function create() {
 
-
+    this.score = 0;
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
-
+    
     sky = new Sky(this, WIDTH, HEIGHT);
+    var style = {fontSize: '32px', fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+    scoreText = this.add.text(16, 16, 'score: 0', style);
+    scoreText.setText('Score: ' + score);
     nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.525;
@@ -149,6 +155,10 @@ function create() {
     this.physics.add.overlap(player.entity, enemy.entity, EnemyHitPlayer, null, this);
 }
 
+function addScore(increment){
+    this.score += increment;
+    scoreText.setText('Score: ' + this.score);
+}
 
 function createParticleEmitter(game) {
 
