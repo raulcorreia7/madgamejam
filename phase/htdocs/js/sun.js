@@ -5,7 +5,7 @@ class Sun {
         this.radius = earth.radius * 2;
         this.angle = 0;
         this.light = game.lights.addLight(this.entity.x, this.entity.y,
-            earth.radius, 0xffff00, 5);
+            earth.radius * 1.75, 0xffff00, 5);
         this.entity.scaleX = 0.35;
         this.entity.scaleY = 0.35;
         this.ANGLE_STEP = Math.PI / 512;
