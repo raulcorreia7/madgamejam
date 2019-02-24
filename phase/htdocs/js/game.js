@@ -28,6 +28,9 @@ var game = new Phaser.Game(config);
 
 //Gameobjects
 
+var score = 0;
+var scoreText;
+
 //The sun
 var sun;
 //Earth
@@ -118,11 +121,13 @@ function preload() {
 
 function create() {
 
-
+    this.score = 0;
     etPlanets_physics = this.physics.add.staticGroup();
     cursors = this.input.keyboard.createCursorKeys();
-
+    
     sky = new Sky(this, WIDTH, HEIGHT);
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+    scoreText.setText('Score: ' + score);
     nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
     city.scaleX = 0.525;
