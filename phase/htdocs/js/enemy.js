@@ -23,6 +23,10 @@ class Enemy {
         });
 
         this.entity = game.physics.add.sprite(earth.x, earth.y - earth.radius, 'enemy');
+        this.entity.scaleX = 0.5;
+        this.entity.scaleY = 0.5;
+        this.entity.width *= this.entity.scaleX;
+        this.entity.height *= this.entity.scaleY;
 
         this.entity.y -= this.entity.height / 2;
         this.radius = earth.radius + this.entity.height / 2;
@@ -52,7 +56,7 @@ class Enemy {
 
     update(earth, player) {
         if (this.RectCircleColliding(this, player.entity)) {
-            this.entity.disableBody(true, true);
+            //this.entity.disableBody(true, true);
         }
 
         //Left
@@ -70,28 +74,26 @@ class Enemy {
             this.angle -= this.rotation_step;
             this.entity.anims.play('enemyleft', true);
         }
-
-        
     }
 
     RectCircleColliding(circle, rect) {
         var distX = Math.abs(circle.x() - rect.x - rect.width / 2);
         var distY = Math.abs(circle.y() - rect.y - rect.height / 2);
-    
+
         if (distX >= (rect.width / 2 + circle.radius)) {
             return false;
         }
         if (distY >= (rect.height / 2 + circle.radius)) {
             return false;
         }
-    
+
         if (distX < (rect.weight / 2)) {
             return true;
         }
         if (distY < (rect.height / 2)) {
             return true;
         }
-    
+
         var dx = distX - rect.width / 2;
         var dy = distY - rect.height / 2;
         return (dx * dx + dy * dy <= (circle.radius * circle.radius));

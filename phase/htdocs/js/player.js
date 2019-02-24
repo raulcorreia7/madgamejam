@@ -32,10 +32,10 @@ class Player {
 
         this.entity.setDepth(2);
         this.hands.setDepth(1);
-        
-        
-        this.hands.rotation = Math.PI/2;
-        this.hands.y -= this.hands.height/2;
+
+
+        this.hands.rotation = Math.PI / 2;
+        this.hands.y -= this.hands.height / 2;
         this.entity.y -= this.entity.height / 2;
         this.entity.height *= 0.7;
         this.entity.width *= 0.7;
@@ -52,10 +52,15 @@ class Player {
         this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
         this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
         this.hands.x = earth.x() + Math.cos(this.angle) * this.radius;
-        this.hands.y = earth.y() + Math.sin(this.angle) * (this.radius + this.hands.height/2);
+        this.hands.y = earth.y() + Math.sin(this.angle) * (this.radius + this.hands.height / 2);
         this.entity.rotation = Math.PI / 2;
         this.entity.setCollideWorldBounds(true);
         this.rotation_step = Math.PI / 256;
+
+        this.TIME_ELAPSED = 0;
+        this.DAMAGE_COOLDOWN = 2 * 1000;
+        this.INVUNERABLE = false;
+        this.health = 3;
     }
 
     x() {
@@ -69,13 +74,13 @@ class Player {
         return this.entity.width;
     }
 
-    height(){
+    height() {
         return this.entity.height;
     }
 
-    update(earth,cursors) {
+    update(deltaTime, earth, cursors) {
         if (cursors.left.isDown) {
-            this.entity.x = earth.x ()+ Math.cos(this.angle) * this.radius;
+            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
             this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
             this.hands.x = this.entity.x + Math.cos(this.angle) * this.entity.height / 2;
             this.hands.y = this.entity.y + Math.sin(this.angle) * this.entity.height / 2;
@@ -97,5 +102,27 @@ class Player {
             this.hands.x = 500000;
             this.entity.anims.play('turn');
         }
+        if (this.INVUNERABLE) {
+            this.TIME_ELAPSED += deltaTime;
+            if (this.TIME_ELAPSED >= this.DAMAGE_COOLDOWN) {
+                this.INVUNERABLE = false;
+                this.TIME_ELAPSED = 0;
+            }
+        }
+    }
+
+    lives() {
+        return this.health;
+    }
+
+    takeDamage() {
+        if (!this.INVUNERABLE) {
+            this.INVUNERABLE = true;
+            if (this.health > 0) {
+                this.health--;
+            }
+        }
+
+
     }
 }
