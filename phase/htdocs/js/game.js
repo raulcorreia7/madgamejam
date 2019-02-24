@@ -126,7 +126,8 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
     
     sky = new Sky(this, WIDTH, HEIGHT);
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+    var style = {fontSize: '32px', fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+    scoreText = this.add.text(16, 16, 'score: 0', style);
     scoreText.setText('Score: ' + score);
     nyanCat = new NyanCat(this, WIDTH, HEIGHT);
     city = this.add.sprite(WIDTH / 2, HEIGHT / 2, 'city');
@@ -149,6 +150,11 @@ function create() {
     // createClouds(this);
 
     createParticleEmitter(this);
+}
+
+function addScore(increment){
+    this.score += increment;
+    scoreText.setText('Score: ' + this.score);
 }
 
 function createParticleEmitter(game) {
