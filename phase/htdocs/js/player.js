@@ -60,7 +60,8 @@ class Player {
         this.TIME_ELAPSED = 0;
         this.DAMAGE_COOLDOWN = 2 * 1000;
         this.INVUNERABLE = false;
-        this.health = 3;
+        this.MAX_LIVES = 3;
+        this.health = this.MAX_LIVES;
     }
 
     x() {
