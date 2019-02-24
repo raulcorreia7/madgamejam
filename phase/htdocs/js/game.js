@@ -183,13 +183,14 @@ function createPlanets(game) {
 
         start += step;
 
-        // var MAX_PARTICLES = Phaser.Math.Between(10, 15);
-        // var step = 2 * Math.PI / MAX_PARTICLES;
-        // var start = step * Math.random();
-        // for (var i = 0; i < MAX_PARTICLES; i++) {
-        // }
-        let particle = new Particle(game, et);
-        et.addAsteroid(particle);
+        var MAX_PARTICLES = Phaser.Math.Between(10, 15);
+        var step2 = 2 * Math.PI / MAX_PARTICLES;
+        var start2 = step2 * Math.random();
+        for (var j = 0; j < MAX_PARTICLES; j++) {
+            let particle = new Particle(game, et, start2 * j);
+
+            et.addAsteroid(particle);
+        }
     }
 }
 
