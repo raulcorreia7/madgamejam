@@ -63,6 +63,8 @@ class Player {
         this.MAX_LIVES = 3;
         this.health = this.MAX_LIVES;
         this.break_glass_sound = game.sound.add('break_heart');
+        this.earth = earth;
+        this.direction = 'idle';
 
     }
 
@@ -82,24 +84,24 @@ class Player {
     }
 
     update(deltaTime, earth, cursors) {
+
+        if (this.direction == 'left') {
+            this.moveLeft();
+        } else {
+            if (this.direction == 'right') {
+                this.moveRight();
+            } else {
+                if (this.direction == 'idle') {
+                    this.hands.x = 500000;
+                    this.entity.anims.play('turn');
+                }
+            }
+        }
+
         if (cursors.left.isDown) {
-            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
-            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-            this.hands.x = this.entity.x + Math.cos(this.angle) * this.entity.height / 2;
-            this.hands.y = this.entity.y + Math.sin(this.angle) * this.entity.height / 2;
-            this.hands.rotation -= this.rotation_step;
-            this.entity.rotation -= this.rotation_step;
-            this.angle -= this.rotation_step;
-            this.entity.anims.play('left', true);
+            this.moveLeft();
         } else if (cursors.right.isDown) {
-            this.entity.x = earth.x() + Math.cos(this.angle) * this.radius;
-            this.entity.y = earth.y() + Math.sin(this.angle) * this.radius;
-            this.hands.x = this.entity.x + Math.cos(this.angle) * this.entity.height / 2;
-            this.hands.y = this.entity.y + Math.sin(this.angle) * this.entity.height / 2;
-            this.hands.rotation += this.rotation_step;
-            this.entity.rotation += this.rotation_step;
-            this.angle += this.rotation_step;
-            this.entity.anims.play('right', true);
+            this.moveRight();
         } else {
             // player.setVelocityX(0);
             this.hands.x = 500000;
@@ -116,6 +118,28 @@ class Player {
         } else {
             this.entity.setTint(0xFFFFFF);
         }
+    }
+
+    moveRight() {
+        this.entity.x = this.earth.x() + Math.cos(this.angle) * this.radius;
+        this.entity.y = this.earth.y() + Math.sin(this.angle) * this.radius;
+        this.hands.x = this.entity.x + Math.cos(this.angle) * this.entity.height / 2;
+        this.hands.y = this.entity.y + Math.sin(this.angle) * this.entity.height / 2;
+        this.hands.rotation += this.rotation_step;
+        this.entity.rotation += this.rotation_step;
+        this.angle += this.rotation_step;
+        this.entity.anims.play('right', true);
+    }
+
+    moveLeft() {
+        this.entity.x = this.earth.x() + Math.cos(this.angle) * this.radius;
+        this.entity.y = this.earth.y() + Math.sin(this.angle) * this.radius;
+        this.hands.x = this.entity.x + Math.cos(this.angle) * this.entity.height / 2;
+        this.hands.y = this.entity.y + Math.sin(this.angle) * this.entity.height / 2;
+        this.hands.rotation -= this.rotation_step;
+        this.entity.rotation -= this.rotation_step;
+        this.angle -= this.rotation_step;
+        this.entity.anims.play('left', true);
     }
 
     lives() {
@@ -142,6 +166,6 @@ class Player {
     }
 
     changeDirection(whereTo) {
-        console.log(whereTo);
+        this.direction = whereTo;
     }
 }

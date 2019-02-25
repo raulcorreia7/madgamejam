@@ -1,5 +1,5 @@
 class ControllPad {
-    constructor(game,player, width, height) {
+    constructor(game, player, width, height) {
         this.left = game.add.image(width * 0.025, height * 0.75, 'button_left');
         this.right = game.add.image(width * 0.025 + 75, height * 0.75, 'button_right');
 
@@ -8,13 +8,25 @@ class ControllPad {
         this.player = player;
 
         this.left.setInteractive().on(
-            'pointerdown',()=>{
-                player.changeDirection('left');
+            'pointerdown', () => {
+                this.player.changeDirection('left');
+            }
+        )
+
+        this.left.on(
+            'pointerup', () => {
+                this.player.changeDirection('idle');
             }
         )
         this.right.setInteractive().on(
-            'pointerdown',()=>{
-                player.changeDirection('right');
+            'pointerdown', (pointer) => {
+                if (pointer.isDown)
+                    this.player.changeDirection('right');
+            }
+        )
+        this.right.on(
+            'pointerup', () => {
+                this.player.changeDirection('idle');
             }
         )
     }
