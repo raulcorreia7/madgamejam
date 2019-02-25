@@ -63,6 +63,7 @@ class Player {
         this.MAX_LIVES = 3;
         this.health = this.MAX_LIVES;
         this.break_glass_sound = game.sound.add('break_heart');
+
     }
 
     x() {
@@ -131,12 +132,16 @@ class Player {
             if (this.health > 0) {
                 this.health--;
                 this.break_glass_sound.play();
-                
+
             }
         }
     }
 
     setIdle() {
         this.entity.anims.play('turn', true);
+    }
+
+    changeDirection(whereTo) {
+        console.log(whereTo);
     }
 }

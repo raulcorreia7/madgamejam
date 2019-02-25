@@ -82,6 +82,8 @@ var TIME = Date.now();
 
 var nyanCat;
 
+var controllerPad;
+
 var healthBar;
 
 var timerText;
@@ -106,7 +108,7 @@ function preload() {
     this.load.image('city', 'assets/city.png');
     this.load.image('sun', 'assets/sun.png');
     this.load.audio('music', 'assets/Sound/music.mp3');
-    this.load.audio('break_heart', 'assets/Sound/break_heart.mp3');
+    this.load.audio('break_heart', 'assets/Sound/damage.mp3');
     this.load.audio('powerup_planet', 'assets/Sound/powerup_planet.mp3');
     this.load.audio('game_over', 'assets/Sound/game_over.mp3');
     this.load.spritesheet('ray', 'assets/light.png', {
@@ -138,6 +140,8 @@ function preload() {
             frameHeight: 80
         });
     this.load.atlas('flares', 'assets/flares.png', 'assets/flares.json');
+    this.load.image('button_left', 'assets/button_left.png')
+    this.load.image('button_right', 'assets/button_right.png')
 }
 
 function create() {
@@ -171,6 +175,7 @@ function create() {
     enemy = new Enemy(this, earth, player);
     sun_rays = this.add.group();
     healthBar = new Healthbar(this, player, WIDTH, HEIGHT);
+    controllerPad = new ControllPad(this,player, WIDTH, HEIGHT);
     music = this.sound.add('music');
     gameOverSound = this.sound.add('game_over');
     music.play();
@@ -269,13 +274,13 @@ function update() {
             }, 1.5 * 1000);
             playedGameOver = true;
             music.stop();
+            healthBar.update(player);
+            player.setIdle();
+            enemy.setIdle();
             setTimeout(() => {
                 location.reload();
             }, 6 * 1000);
         }
-        healthBar.update(player);
-        player.setIdle();
-        enemy.setIdle();
         //this.scene.pause();
         return;
     };
@@ -283,12 +288,12 @@ function update() {
         game.sound.context.resume();
     }
 
+
     sun.update(earth);
     player.update(deltaTime, earth, cursors);
     enemy.update(earth, player);
     etPlanets.forEach(e => e.update(deltaTime));
     healthBar.update(player);
-
     if (rate == ray_cooldown) {
         rate = 0;
     }
